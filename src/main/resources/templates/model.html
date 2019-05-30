@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/head.html :: head">
+</head>
+<body>
+
+<!-- Navbar -->
+<navbar  th:if="${login == null}" th:insert="fragments/navbarLoggedOut :: loggedOut"> </navbar>
+<navbar  th:unless="${login == null}" th:insert="fragments/navbarLoggedIn :: loggedIn"></navbar>
+
+<footer th:insert="fragments/footer :: footer"></footer>
+</body>
+</html>

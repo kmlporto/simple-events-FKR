@@ -3,11 +3,10 @@
 <head th:insert="fragments/head.html :: head">
 </head>
 <body>
+
     <!-- Navbar -->
     <navbar  th:if="${login == null}" th:insert="fragments/navbarLoggedOut :: loggedOut"> </navbar>
     <navbar  th:unless="${login == null}" th:insert="fragments/navbarLoggedIn :: loggedIn"></navbar>
-
-    <h1>Dados criados com Sucesso!</h1>
 
     <footer th:insert="fragments/footer :: footer"></footer>
 </body>

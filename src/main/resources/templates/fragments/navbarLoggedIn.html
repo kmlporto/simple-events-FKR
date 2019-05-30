@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-light mb-4" th:fragment="loggedIn">
+        <a class="navbar-brand " href="#">Teste
+<!--            <img src="fakara2.png">-->
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse items-navbar" id="navbarCollapse">
+            <form class="form-inline mt-2 mt-md-0 col-lg-8" style="justify-content: flex-end;">
+                <input class="form-control mr-sm-2 col-lg-8" type="text" placeholder="Search" aria-label="Search">
+                <button class="btn teste my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Olá, Usuário</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</body>
+</html>
