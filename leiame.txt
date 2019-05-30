@@ -1,2 +1,3 @@
 SITES REFERENCIAS
 https://www.baeldung.com/spring-boot-security-autoconfiguration
+https://www.baeldung.com/java-faker
