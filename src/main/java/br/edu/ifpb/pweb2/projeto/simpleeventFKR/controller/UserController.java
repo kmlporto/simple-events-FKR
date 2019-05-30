@@ -1,7 +1,5 @@
 package br.edu.ifpb.pweb2.projeto.simpleeventFKR.controller;
 
-import java.util.List;
-
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +19,7 @@ public class UserController {
 	@Autowired
 	public UserDAO dao;
 	
-	@RequestMapping("")
+	@RequestMapping(method=RequestMethod.GET)
 	public ModelAndView list() {
 		ModelAndView model = new ModelAndView("usuarios");
 		model.addObject("usuarios", dao.findAll());
@@ -34,7 +32,7 @@ public class UserController {
 		if (bindingResult.hasErrors())
 			return form(user);
 		else { 
-			dao.saveAndFlush(user);
+			dao.save(user);
 			return list();
 		}
 	}
