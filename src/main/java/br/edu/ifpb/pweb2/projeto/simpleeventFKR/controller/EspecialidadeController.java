@@ -1,4 +1,4 @@
-package br.edu.ifpb.pweb2.projeto.simpleeventFKR.controllers;
+package br.edu.ifpb.pweb2.projeto.simpleeventFKR.controller;
 
 import java.util.List;
 
