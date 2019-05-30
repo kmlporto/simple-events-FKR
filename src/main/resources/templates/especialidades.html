@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<link rel="stylesheet" href="http://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+		<meta charset="UTF-8">
+		<title>Listagem de Especialidades</title>
+	</head>
+<body>
+	<div class="container">
+		<br>
+		<h2>Especialidades cadastradas</h2>
+		<hr>
+		<table class="table table-stripped">
+		<tr>
+			<th>Id</th>
+			<th>Nome</th>
+			<th>Descrição</th>
+		</tr>
+		<tr th:each="espec: ${especialidades}">
+			<td th:text="${espec.id}"></td>
+			<td th:text="${espec.nome}"></td>
+			<td th:text="${espec.descricao}"></td>
+		</tr>
+		</table>
+	</div>	
+</body>
+</html>
