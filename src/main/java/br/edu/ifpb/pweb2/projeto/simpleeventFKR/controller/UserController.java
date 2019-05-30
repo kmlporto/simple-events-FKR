@@ -7,8 +7,8 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.UserDAO;
@@ -24,19 +24,18 @@ public class UserController {
 	@RequestMapping("")
 	public ModelAndView list() {
 		ModelAndView model = new ModelAndView("usuarios");
-		List<User> usuarios = dao.findAll();
-		model.addObject("usuarios", usuarios);
+		model.addObject("usuarios", dao.findAll());
 		return model;
 	}
 	
 	
-	@PostMapping("/save")
-	public String save(@Valid User user, BindingResult  bindingResult) {
+	@RequestMapping(method=RequestMethod.POST)
+	public ModelAndView save(@Valid User user, BindingResult  bindingResult) {
 		if (bindingResult.hasErrors())
-			return "usuarioForm";
+			return form(user);
 		else { 
-			dao.save(user);
-			return "redirect:usuarios";
+			dao.saveAndFlush(user);
+			return list();
 		}
 	}
 	
