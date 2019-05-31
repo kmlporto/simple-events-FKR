@@ -20,7 +20,7 @@ public class EspecialidadeController {
 	
 	@RequestMapping("")
 	public ModelAndView list() {
-		ModelAndView model = new ModelAndView("especialidades");
+		ModelAndView model = new ModelAndView("especialidade/list");
 		List<Especialidade> espec = dao.findAll();
 		model.addObject("especialidades", espec);
 		return model;
@@ -34,6 +34,6 @@ public class EspecialidadeController {
 	
 	@RequestMapping("/form")
 	public String form() {
-		return "especialidadeForm";
+		return "especialidade/form";
 	}
 }
