@@ -26,11 +26,11 @@ public class Evento {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@NotEmpty(message = "Descri��o � obrigat�ria")
+	@NotEmpty(message = "Campo obrigatorio")
 	private String descricao;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@NotNull(message = "Data � obrigat�ria")
+	@NotNull(message = "Campo obrigatorio")
 	@Future(message = "A data deve estar no futuro")
 	private Date data;
 	private String local;
@@ -58,28 +58,28 @@ public class Evento {
 		this.local = l;
 	}
 
-	public void setAvaliacaoEventos(List<AvaliacaoEvento> avaliacao) {
-		this.avaliacaoEventos = avaliacao;
-	}
-
 	public List<AvaliacaoEvento> getAvaliacaoEventos() {
 		return avaliacaoEventos;
 	}
 	
-	public void add(Vaga vaga) {
-		this.vagas.add(vaga);
-	}
-
-	public void setAvaliacao_eventos(ArrayList<AvaliacaoEvento> avaliacao) {
+	public void setAvaliacaoEventos(ArrayList<AvaliacaoEvento> avaliacao) {
 		this.avaliacaoEventos = avaliacao;
 	}
 
+	public void add(AvaliacaoEvento avaliacao) {
+		this.avaliacaoEventos.add(avaliacao);
+	}
+	
 	public List<Vaga> getVagas() {
 		return vagas;
 	}
 
 	public void setVagas(ArrayList<Vaga> vagas) {
 		this.vagas = vagas;
+	}
+
+	public void add(Vaga vaga) {
+		this.vagas.add(vaga);
 	}
 
 	public User getOwner() {
@@ -122,14 +122,11 @@ public class Evento {
 		this.local = local;
 	}
 	
-	public void setVagas(List<Vaga> vagas) {
-		this.vagas = vagas;
-	}
 
 	@Override
 	public String toString() {
 		return "Evento [id=" + id + ", descricao=" + descricao + ", data=" + data + ", local=" + local + ", owner="
-				+ owner + ", vagas=" + vagas + ", avaliacao_eventos=" + avaliacaoEventos + "]";
+				+ owner + ", vagas=" + vagas + ", avaliacao eventos=" + avaliacaoEventos + "]";
 	}
 
 }

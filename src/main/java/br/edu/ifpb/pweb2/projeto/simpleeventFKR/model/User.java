@@ -52,31 +52,31 @@ public class User implements Serializable {
 	
 	/* relacao com candidato_vaga */
 	@OneToOne
-	private CandidatoVaga candidato_vaga;
+	private CandidatoVaga candidatoVaga;
 	
 	/* relacao com Avaliacao_evento */
 	@OneToOne
-	private AvaliacaoEvento avaliacao_evento;
+	private AvaliacaoEvento avaliacaoEvento;
 	
 	private boolean isAdmin = false;
 
 	public User() {
 	};
 
-	public AvaliacaoEvento getAvaliacao_evento() {
-		return avaliacao_evento;
+	public AvaliacaoEvento getAvaliacaoEvento() {
+		return avaliacaoEvento;
 	}
 
-	public void setAvaliacao_evento(AvaliacaoEvento avaliacao_evento) {
-		this.avaliacao_evento = avaliacao_evento;
+	public void setAvaliacaoEvento(AvaliacaoEvento avaliacao) {
+		this.avaliacaoEvento = avaliacao;
 	}
 
-	public CandidatoVaga getCandidato_vaga() {
-		return candidato_vaga;
+	public CandidatoVaga getCandidatoVaga() {
+		return candidatoVaga;
 	}
 
-	public void setCandidato_vaga(CandidatoVaga candidato_vaga) {
-		this.candidato_vaga = candidato_vaga;
+	public void setCandidatoVaga(CandidatoVaga candidatoVaga) {
+		this.candidatoVaga = candidatoVaga;
 	}
 
 	public List<Evento> getEventos() {
@@ -95,7 +95,7 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
-	public void addEvento(Evento ev) {
+	public void add(Evento ev) {
 		this.eventos.add(ev);
 	}
 

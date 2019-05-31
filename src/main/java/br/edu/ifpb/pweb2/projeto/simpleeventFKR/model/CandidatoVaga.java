@@ -33,11 +33,11 @@ public class CandidatoVaga {
 		this.vaga = vaga;
 	}
 
-	public int getNota_desempenho() {
+	public int getNotaDesempenho() {
 		return notaDesempenho;
 	}
 
-	public void setNota_desempenho(int nota) {
+	public void setNotaDesempenho(int nota) {
 		this.notaDesempenho = nota;
 	}
 
@@ -59,7 +59,7 @@ public class CandidatoVaga {
 
 	@Override
 	public String toString() {
-		return "Candidato_Vaga [id=" + id + ", vaga=" + vaga.getEspecialidade().getNome() + ", nota_desempenho=" + notaDesempenho + ", state="
+		return "Candidato_Vaga [id=" + id + ", vaga=" + vaga.getEspecialidade().getNome() + ", nota desempenho=" + notaDesempenho + ", state="
 				+ state + ", candidato=" + candidato.getNome() + "]";
 	}
 	

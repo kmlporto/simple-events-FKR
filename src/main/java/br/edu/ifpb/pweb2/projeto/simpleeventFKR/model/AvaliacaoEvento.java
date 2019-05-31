@@ -16,7 +16,7 @@ public class AvaliacaoEvento {
 	private Long id;
 	@ManyToOne	
 	private Evento evento;
-	private int nota_avaliacao_evento;
+	private int notaAvaliacaoEvento;
 	@OneToOne
 	private User participante;
 
@@ -32,11 +32,11 @@ public class AvaliacaoEvento {
 	}
 
 	public int getNota_avaliacao_evento() {
-		return nota_avaliacao_evento;
+		return notaAvaliacaoEvento;
 	}
 
-	public void setNota_avaliacao_evento(int nota_avaliacao_evento) {
-		this.nota_avaliacao_evento = nota_avaliacao_evento;
+	public void setNota_avaliacao_evento(int nota) {
+		this.notaAvaliacaoEvento = nota;
 	}
 
 	public User getParticipante() {

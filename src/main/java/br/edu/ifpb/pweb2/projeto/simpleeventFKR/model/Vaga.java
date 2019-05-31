@@ -22,9 +22,9 @@ public class Vaga {
 	private Long id;
 	@ManyToOne
 	private Evento evento;
-	private int qtd_vagas;
+	private int qtdVagas;
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "vaga", cascade = CascadeType.ALL)
-	private List<CandidatoVaga> candidato_vaga = new ArrayList<>();
+	private List<CandidatoVaga> candidatoVaga = new ArrayList<>();
 	@OneToOne
 	private Especialidade especialidade;
 	
@@ -46,29 +46,33 @@ public class Vaga {
 		this.especialidade = especialidade;
 	}
 
-	
 	public Evento getEvento() {
 		return evento;
 	}
+
 	public void setEvento(Evento evento) {
 		this.evento = evento;
 	}
-	public int getQtd_vagas() {
-		return qtd_vagas;
+	
+	public int getQtdVagas() {
+		return qtdVagas;
 	}
-	public void setQtd_vagas(int qtd_vagas) {
-		this.qtd_vagas = qtd_vagas;
+	
+	public void setQtdVagas(int qtd) {
+		this.qtdVagas = qtd;
 	}
-	public List<CandidatoVaga> getCandidato_vaga() {
-		return candidato_vaga;
+	
+	public List<CandidatoVaga> getCandidatoVaga() {
+		return candidatoVaga;
 	}
-	public void setCandidato_vaga(ArrayList<CandidatoVaga> candidato_vaga) {
-		this.candidato_vaga = candidato_vaga;
+	
+	public void setCandidatoVaga(ArrayList<CandidatoVaga> candidato) {
+		this.candidatoVaga = candidato;
 	}
 
 	@Override
 	public String toString() {
-		return "Vaga [id=" + id + ", evento=" + evento.getDescricao() + ", qtd_vagas=" + qtd_vagas+
+		return "Vaga [id=" + id + ", evento=" + evento.getDescricao() + ", qtd vagas=" + qtdVagas+
 				", especialidade=" + especialidade.getNome() + "]";
 	}
 	
