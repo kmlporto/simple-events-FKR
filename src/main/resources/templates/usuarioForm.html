@@ -10,7 +10,7 @@
 		<br>
 		<h2>Adicionar um usuário</h2>
 		<hr>
-		<form  th:object="${user}" th:action="@{save}" method="POST">
+		<form  th:object="${user}" action="/usuarios" method="POST">
 			<div class="form-row">
 				<div class="form-group col-md-4" >	
 				    <label for="nome">Nome</label>
