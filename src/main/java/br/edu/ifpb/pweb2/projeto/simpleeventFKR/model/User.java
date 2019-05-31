@@ -52,30 +52,30 @@ public class User implements Serializable {
 	
 	/* relacao com candidato_vaga */
 	@OneToOne
-	private Candidato_Vaga candidato_vaga;
+	private CandidatoVaga candidato_vaga;
 	
 	/* relacao com Avaliacao_evento */
 	@OneToOne
-	private Avaliacao_Evento avaliacao_evento;
+	private AvaliacaoEvento avaliacao_evento;
 	
 	private boolean isAdmin = false;
 
 	public User() {
 	};
 
-	public Avaliacao_Evento getAvaliacao_evento() {
+	public AvaliacaoEvento getAvaliacao_evento() {
 		return avaliacao_evento;
 	}
 
-	public void setAvaliacao_evento(Avaliacao_Evento avaliacao_evento) {
+	public void setAvaliacao_evento(AvaliacaoEvento avaliacao_evento) {
 		this.avaliacao_evento = avaliacao_evento;
 	}
 
-	public Candidato_Vaga getCandidato_vaga() {
+	public CandidatoVaga getCandidato_vaga() {
 		return candidato_vaga;
 	}
 
-	public void setCandidato_vaga(Candidato_Vaga candidato_vaga) {
+	public void setCandidato_vaga(CandidatoVaga candidato_vaga) {
 		this.candidato_vaga = candidato_vaga;
 	}
 

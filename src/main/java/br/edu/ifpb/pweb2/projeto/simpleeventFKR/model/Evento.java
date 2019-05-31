@@ -35,29 +35,22 @@ public class Evento {
 	private Date data;
 	private String local;
 	
-	/* rela��o com Dono do evento */
+	/* Relacao com Dono do evento */
 	@ManyToOne
 	private User owner;
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "evento", cascade = CascadeType.ALL)
-	/* Rela��o com as vagas */
+	/* Relacao com as vagas */
 	private List<Vaga> vagas = new ArrayList<>();
 
-	/* rela��o com avalia��o_eventos */
+	/* Relacao com avaliacaoEventos*/
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "evento", cascade = CascadeType.ALL)
-	private List<Avaliacao_Evento> avaliacao_eventos = new ArrayList<>();
+	private List<AvaliacaoEvento> avaliacaoEventos = new ArrayList<>();
+
 
 	public Evento() {
 	}
 	
-	
-
-	public void setAvaliacao_eventos(List<Avaliacao_Evento> avaliacao_eventos) {
-		this.avaliacao_eventos = avaliacao_eventos;
-	}
-
-
-
 	public Evento(String d, Date dh, String l) {
 		super();
 		this.descricao = d;
@@ -65,16 +58,20 @@ public class Evento {
 		this.local = l;
 	}
 
-	public List<Avaliacao_Evento> getAvaliacao_eventos() {
-		return avaliacao_eventos;
+	public void setAvaliacaoEventos(List<AvaliacaoEvento> avaliacao) {
+		this.avaliacaoEventos = avaliacao;
+	}
+
+	public List<AvaliacaoEvento> getAvaliacaoEventos() {
+		return avaliacaoEventos;
 	}
 	
 	public void add(Vaga vaga) {
 		this.vagas.add(vaga);
 	}
 
-	public void setAvaliacao_eventos(ArrayList<Avaliacao_Evento> avaliacao_eventos) {
-		this.avaliacao_eventos = avaliacao_eventos;
+	public void setAvaliacao_eventos(ArrayList<AvaliacaoEvento> avaliacao) {
+		this.avaliacaoEventos = avaliacao;
 	}
 
 	public List<Vaga> getVagas() {
@@ -132,7 +129,7 @@ public class Evento {
 	@Override
 	public String toString() {
 		return "Evento [id=" + id + ", descricao=" + descricao + ", data=" + data + ", local=" + local + ", owner="
-				+ owner + ", vagas=" + vagas + ", avaliacao_eventos=" + avaliacao_eventos + "]";
+				+ owner + ", vagas=" + vagas + ", avaliacao_eventos=" + avaliacaoEventos + "]";
 	}
 
 }

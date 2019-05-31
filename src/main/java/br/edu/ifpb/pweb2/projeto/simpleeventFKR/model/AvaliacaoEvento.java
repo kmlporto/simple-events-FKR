@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "tb_avaliacao_evento")
-public class Avaliacao_Evento {
+public class AvaliacaoEvento {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -20,7 +20,7 @@ public class Avaliacao_Evento {
 	@OneToOne
 	private User participante;
 
-	public Avaliacao_Evento() {
+	public AvaliacaoEvento() {
 	};
 
 	public Evento getEvento() {

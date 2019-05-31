@@ -24,7 +24,7 @@ public class Vaga {
 	private Evento evento;
 	private int qtd_vagas;
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "vaga", cascade = CascadeType.ALL)
-	private List<Candidato_Vaga> candidato_vaga = new ArrayList<>();
+	private List<CandidatoVaga> candidato_vaga = new ArrayList<>();
 	@OneToOne
 	private Especialidade especialidade;
 	
@@ -59,10 +59,10 @@ public class Vaga {
 	public void setQtd_vagas(int qtd_vagas) {
 		this.qtd_vagas = qtd_vagas;
 	}
-	public List<Candidato_Vaga> getCandidato_vaga() {
+	public List<CandidatoVaga> getCandidato_vaga() {
 		return candidato_vaga;
 	}
-	public void setCandidato_vaga(ArrayList<Candidato_Vaga> candidato_vaga) {
+	public void setCandidato_vaga(ArrayList<CandidatoVaga> candidato_vaga) {
 		this.candidato_vaga = candidato_vaga;
 	}
 

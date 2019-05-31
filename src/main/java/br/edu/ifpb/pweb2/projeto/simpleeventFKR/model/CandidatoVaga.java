@@ -10,19 +10,19 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "tb_candidato_vaga")
-public class Candidato_Vaga {
+public class CandidatoVaga {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@ManyToOne
 	private Vaga vaga;
-	private int nota_desempenho;
+	private int notaDesempenho;
 	private State state;
 	@OneToOne
 	private User candidato;
 
-	public Candidato_Vaga() {
+	public CandidatoVaga() {
 	};
 
 	public Vaga getVaga() {
@@ -34,11 +34,11 @@ public class Candidato_Vaga {
 	}
 
 	public int getNota_desempenho() {
-		return nota_desempenho;
+		return notaDesempenho;
 	}
 
-	public void setNota_desempenho(int nota_desempenho) {
-		this.nota_desempenho = nota_desempenho;
+	public void setNota_desempenho(int nota) {
+		this.notaDesempenho = nota;
 	}
 
 	public State getState() {
@@ -59,7 +59,7 @@ public class Candidato_Vaga {
 
 	@Override
 	public String toString() {
-		return "Candidato_Vaga [id=" + id + ", vaga=" + vaga.getEspecialidade().getNome() + ", nota_desempenho=" + nota_desempenho + ", state="
+		return "Candidato_Vaga [id=" + id + ", vaga=" + vaga.getEspecialidade().getNome() + ", nota_desempenho=" + notaDesempenho + ", state="
 				+ state + ", candidato=" + candidato.getNome() + "]";
 	}
 	
