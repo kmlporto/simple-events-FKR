@@ -6,7 +6,7 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-md navbar-light mb-4" th:fragment="loggedOut">
-        <a class="navbar-brand " href="#">
+        <a class="navbar-brand " th:href="@{/}">
             <img src="https://res.cloudinary.com/deqmrmqui/image/upload/v1559256417/fakara2_euoenn.png">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse"
@@ -20,7 +20,7 @@
             </form>
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Cadastrar</a>
+                    <a class="nav-link" th:href="@{/usuarios/form}">Cadastrar</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">Login</a>

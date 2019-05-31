@@ -8,6 +8,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.UserDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.User;
@@ -21,7 +22,7 @@ public class UserController {
 	
 	@RequestMapping(method=RequestMethod.GET)
 	public ModelAndView list() {
-		ModelAndView model = new ModelAndView("usuarios");
+		ModelAndView model = new ModelAndView("user/list");
 		model.addObject("usuarios", dao.findAll());
 		return model;
 	}
@@ -39,7 +40,7 @@ public class UserController {
 	
 	@RequestMapping("/form")
 	public ModelAndView form(User user) {
-		ModelAndView model = new ModelAndView("usuarioForm");
+		ModelAndView model = new ModelAndView("user/list");
 		model.addObject("user", user);
 		return model;
 	}
