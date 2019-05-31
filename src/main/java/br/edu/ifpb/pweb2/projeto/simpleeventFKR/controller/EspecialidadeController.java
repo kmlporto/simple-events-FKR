@@ -21,8 +21,8 @@ public class EspecialidadeController {
 	@RequestMapping("")
 	public ModelAndView list() {
 		ModelAndView model = new ModelAndView("especialidade/list");
-		List<Especialidade> espec = dao.findAll();
-		model.addObject("especialidades", espec);
+		List<Especialidade> especialidades = dao.findAll();
+		model.addObject("especialidades", especialidades);
 		return model;
 	}
 	
