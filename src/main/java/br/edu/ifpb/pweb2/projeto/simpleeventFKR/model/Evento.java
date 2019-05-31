@@ -39,7 +39,7 @@ public class Evento {
 	@ManyToOne
 	private User owner;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "evento", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "evento", cascade = CascadeType.REMOVE, orphanRemoval=true)
 	/* Relacao com as vagas */
 	private List<Vaga> vagas = new ArrayList<>();
 
