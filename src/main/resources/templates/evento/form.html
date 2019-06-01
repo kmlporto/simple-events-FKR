@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/head.html :: head">
+</head>
+<body>
+
+<!-- Navbar -->
+<navbar  th:if="${login == null}" th:insert="fragments/navbarLoggedOut :: loggedOut"> </navbar>
+<navbar  th:unless="${login == null}" th:insert="fragments/navbarLoggedIn :: loggedIn"></navbar>
+
+<div class="container">
+		<br>
+		<h2>Adicionar Evento</h2>
+		<hr>
+		<form th:object="${evento}" action="/eventos" method="POST">
+			<div class="form-row">
+				<div class="form-group col-md-4">
+					<label for="descricao">Descrição</label> 
+					<input type="text" class="form-control" id="descricao" name="descricao"
+						placeholder="Descrição do evento aqui">
+				</div>
+
+				<div class="form-group col-md-4">
+					<label for="local">Local</label> 
+					<input type="text" class="form-control" id="local" name="local" th:field="*{local}">
+					<p th:if="${#fields.hasErrors('local')}" th:errors="*{local}"></p>
+				</div>
+
+				<div class="form-group col-md-4">
+					<label for="data">Data</label> 
+					<input type="date" class="form-control" id="data" name="data">
+					<p class="danger" th:if="${#fields.hasErrors('data')}" th:errors="*{data}"></p>
+				</div>
+			</div>
+			<button type="submit" class="btn btn-primary">Submit</button>
+		</form>
+	</div>
+
+
+
+<footer th:insert="fragments/footer :: footer"></footer>
+</body>
+</html>

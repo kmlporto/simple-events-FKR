@@ -1,6 +1,5 @@
 package br.edu.ifpb.pweb2.projeto.simpleeventFKR.controller;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -8,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -15,7 +15,6 @@ import org.springframework.web.servlet.ModelAndView;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.EspecialidadeDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.EventoDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.UserDAO;
-import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Especialidade;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Evento;
 
 @Controller
@@ -62,24 +61,23 @@ public class EventoController {
 	}
 	
 	@RequestMapping("/delete/{id}")
-	public ModelAndView delete(Long id) {
+	public ModelAndView delete(@PathVariable("id") Long id) {
 		ModelAndView modelList = new ModelAndView("evento/list");
 		Optional<Evento> optionalEvento = eventDAO.findById(id);
-		Evento evento = optionalEvento.get();
-		if (evento != null)
-			eventDAO.delete(evento);
-		else
+		if (optionalEvento != null) {
+			modelList.addObject("deletado", "Evento deletado com sucesso!");
+			eventDAO.deleteById(id);
+		}else
 			modelList.addObject("error", "Evento não encontrado!");
 		return modelList;
 	}
 	
 	@RequestMapping("/edit/{id}")
-	public ModelAndView edit(Long id) {
+	public ModelAndView edit(@PathVariable("id") Long id) {
 		ModelAndView modelForm = new ModelAndView("evento/form");
 		Optional<Evento> optionalEvento = eventDAO.findById(id);
-		Evento evento = optionalEvento.get();
-		if (evento != null)
-			modelForm.addObject("evento", evento);
+		if (optionalEvento != null)
+			modelForm.addObject("evento", eventDAO.findById(id));
 		else
 			modelForm.addObject("error", "Evento não encontrado!");
 		return modelForm;

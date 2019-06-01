@@ -18,12 +18,19 @@
 			<tr>
 				<th>Id</th>
 				<th>Nome</th>
-				<th>Descrição</th>
+				<th>DescriÃ§Ã£o</th>
+				<th>Action</th>
 			</tr>
 			<tr th:each="espec: ${especialidades}">
 				<td th:text="${espec.id}"></td>
 				<td th:text="${espec.nome}"></td>
 				<td th:text="${espec.descricao}"></td>
+				<td> 
+					<div class="btn-group pull-right">
+						<a class="btn btn-sm btn-primary" th:href="@{especialidades/edit/{id}(id=${espec.id})}" >Editar</a>
+						<a class="delete btn btn-sm btn-danger" th:href="@{especialidades/delete/{id}(id=${espec.id})}">Excluir</a>
+					</div>
+				</td>
 			</tr>
 		</table>
 	</div>
