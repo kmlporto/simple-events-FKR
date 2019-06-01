@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.EspecialidadeDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.EventoDAO;
@@ -48,7 +49,7 @@ public class EventoController {
 		if (result.hasErrors())
 			return form(evento);
 		else {
-			eventoDAO.save(evento);
+			eventoDAO.saveAndFlush(evento);
 			return list();
 		}
 	}
@@ -61,27 +62,19 @@ public class EventoController {
 	}
 	
 	@RequestMapping("/delete/{id}")
-	public ModelAndView delete(@PathVariable("id") Long id) {
-		ModelAndView modelList = new ModelAndView("evento/list");
+	public ModelAndView delete(@PathVariable("id") Long id, RedirectAttributes att) {
 		Optional<Evento> optionalEvento = eventoDAO.findById(id);
 		if (optionalEvento != null) {
-			modelList.addObject("deletado", "Evento deletado com sucesso!");
+			att.addFlashAttribute("deletado", "Evento deletado com sucesso!");
 			eventoDAO.deleteById(id);
-		}else
-			modelList.addObject("error", "Evento não encontrado!");
-
-		modelList.addObject("eventos", eventoDAO.findAll());
-		return modelList;
+		}
+		return new ModelAndView("redirect:/eventos");
 	}
 	
 	@RequestMapping("/edit/{id}")
 	public ModelAndView edit(@PathVariable("id") Long id) {
 		ModelAndView modelForm = new ModelAndView("evento/form");
-		Optional<Evento> optionalEvento = eventoDAO.findById(id);
-		if (optionalEvento != null)
-			modelForm.addObject("evento", eventoDAO.findById(id));
-		else
-			modelForm.addObject("error", "Evento não encontrado!");
+		modelForm.addObject("evento", eventoDAO.findById(id));
 		return modelForm;
 	}
 }

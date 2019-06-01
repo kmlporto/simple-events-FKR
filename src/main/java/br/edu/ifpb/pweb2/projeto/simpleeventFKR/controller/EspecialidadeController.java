@@ -5,10 +5,13 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.EspecialidadeDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Especialidade;
@@ -30,7 +33,7 @@ public class EspecialidadeController {
 
 	@RequestMapping(method=RequestMethod.POST)
 	public ModelAndView save(Especialidade especialidade) {
-		especDAO.save(especialidade);
+		especDAO.saveAndFlush(especialidade);
 		return list();
 	}
 	
@@ -43,26 +46,20 @@ public class EspecialidadeController {
 	}
 
 	@RequestMapping("/delete/{id}")
-	public ModelAndView delete(@PathVariable("id") Long id) {
-		ModelAndView modelList = new ModelAndView("especialidade/list");
+	public ModelAndView delete(@PathVariable("id") Long id, RedirectAttributes att) {
 		Optional<Especialidade> optionalEspecialidade = especDAO.findById(id);
 		if (optionalEspecialidade != null) {
-			modelList.addObject("deletado", "Evento deletado com sucesso!");
+			att.addFlashAttribute("deletado", "Especialidade deletada com sucesso!");
 			especDAO.deleteById(id);
-		}else
-			modelList.addObject("error", "Evento não encontrado!");
-		modelList.addObject("especialidades", especDAO.findAll());
-		return modelList;
+		}
+		return new ModelAndView("redirect:/especialidades");
 	}
 	
-	@RequestMapping("/edit/{id}")
-	public ModelAndView edit(@PathVariable("id") Long id) {
+	@RequestMapping(value="/edit/{id}")
+	public ModelAndView edit(@PathVariable("id") Long id, RedirectAttributes att) {
 		ModelAndView modelForm = new ModelAndView("especialidade/form");
-		Optional<Especialidade> optionalEspecialidade = especDAO.findById(id);
-		if (optionalEspecialidade != null)
-			modelForm.addObject("evento", especDAO.findById(id));
-		else
-			modelForm.addObject("error", "Especialidade não encontrada!");
+		modelForm.addObject("especialidade", especDAO.findById(id).get());
+		
 		return modelForm;
 	}
 	
