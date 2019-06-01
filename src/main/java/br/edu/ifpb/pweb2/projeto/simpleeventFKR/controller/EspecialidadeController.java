@@ -43,7 +43,7 @@ public class EspecialidadeController {
 	}
 
 	@RequestMapping("/delete/{id}")
-	public ModelAndView delete( Long id) {
+	public ModelAndView delete(@PathVariable("id") Long id) {
 		ModelAndView modelList = new ModelAndView("especialidade/list");
 		Optional<Especialidade> optionalEspecialidade = especDAO.findById(id);
 		if (optionalEspecialidade != null) {
