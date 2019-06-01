@@ -40,7 +40,7 @@ public class UserController {
 	
 	@RequestMapping("/form")
 	public ModelAndView form(User user) {
-		ModelAndView model = new ModelAndView("user/list");
+		ModelAndView model = new ModelAndView("user/form");
 		model.addObject("user", user);
 		return model;
 	}
