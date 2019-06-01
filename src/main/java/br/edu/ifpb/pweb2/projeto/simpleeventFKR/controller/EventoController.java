@@ -22,7 +22,7 @@ import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Evento;
 public class EventoController {
 	
 	@Autowired 
-	public EventoDAO eventDAO;
+	public EventoDAO eventoDAO;
 	@Autowired
 	public UserDAO userDAO;
 	@Autowired
@@ -48,7 +48,7 @@ public class EventoController {
 		if (result.hasErrors())
 			return form(evento);
 		else {
-			eventDAO.save(evento);
+			eventoDAO.save(evento);
 			return list();
 		}
 	}
@@ -56,28 +56,30 @@ public class EventoController {
 	@RequestMapping(method=RequestMethod.GET)
 	public ModelAndView list() {
 		ModelAndView modelList = new ModelAndView("evento/list");
-		modelList.addObject("eventos", eventDAO.findAll());
+		modelList.addObject("eventos", eventoDAO.findAll());
 		return modelList;
 	}
 	
 	@RequestMapping("/delete/{id}")
 	public ModelAndView delete(@PathVariable("id") Long id) {
 		ModelAndView modelList = new ModelAndView("evento/list");
-		Optional<Evento> optionalEvento = eventDAO.findById(id);
+		Optional<Evento> optionalEvento = eventoDAO.findById(id);
 		if (optionalEvento != null) {
 			modelList.addObject("deletado", "Evento deletado com sucesso!");
-			eventDAO.deleteById(id);
+			eventoDAO.deleteById(id);
 		}else
 			modelList.addObject("error", "Evento não encontrado!");
+
+		modelList.addObject("eventos", eventoDAO.findAll());
 		return modelList;
 	}
 	
 	@RequestMapping("/edit/{id}")
 	public ModelAndView edit(@PathVariable("id") Long id) {
 		ModelAndView modelForm = new ModelAndView("evento/form");
-		Optional<Evento> optionalEvento = eventDAO.findById(id);
+		Optional<Evento> optionalEvento = eventoDAO.findById(id);
 		if (optionalEvento != null)
-			modelForm.addObject("evento", eventDAO.findById(id));
+			modelForm.addObject("evento", eventoDAO.findById(id));
 		else
 			modelForm.addObject("error", "Evento não encontrado!");
 		return modelForm;

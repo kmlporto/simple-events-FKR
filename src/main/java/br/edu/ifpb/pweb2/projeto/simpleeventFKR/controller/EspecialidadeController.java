@@ -51,6 +51,7 @@ public class EspecialidadeController {
 			especDAO.deleteById(id);
 		}else
 			modelList.addObject("error", "Evento não encontrado!");
+		modelList.addObject("especialidades", especDAO.findAll());
 		return modelList;
 	}
 	
