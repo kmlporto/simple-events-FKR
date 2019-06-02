@@ -2,6 +2,7 @@ package br.edu.ifpb.pweb2.projeto.simpleeventFKR.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -20,12 +21,15 @@ import javax.validation.constraints.Size;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.context.WebApplicationContext;
 
 @Entity
 @Table(name = "tb_usuario")
 @Scope(value=WebApplicationContext.SCOPE_SESSION)
-public class User implements Serializable {
+public class User implements UserDetails {
 	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -155,6 +159,53 @@ public class User implements Serializable {
 	public String toString() {
 		return "User [id=" + id + ", nome=" + nome + ", telefone=" + telefone + ", email=" + email + ", senha=" + senha
 				+ ", datanascimento=" + datanascimento + "]";
+	}
+
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		
+		List<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
+		grantList.add(new SimpleGrantedAuthority("ROLE_USER"));
+		
+		if (this.isAdmin()) {
+			GrantedAuthority autorizacaoAdmin = new SimpleGrantedAuthority("ROLE_ADMIN");
+			grantList.add(autorizacaoAdmin);
+		}
+		return grantList;
+	}
+
+	@Override
+	public String getPassword() {
+		return this.getSenha();
+	}
+
+	@Override
+	public String getUsername() {
+		return this.getEmail();
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return true;
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return true;
 	}
 
 }
