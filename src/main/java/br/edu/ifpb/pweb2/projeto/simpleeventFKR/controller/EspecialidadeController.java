@@ -34,7 +34,7 @@ public class EspecialidadeController {
 	@RequestMapping(method=RequestMethod.POST)
 	public ModelAndView save(Especialidade especialidade) {
 		especDAO.saveAndFlush(especialidade);
-		return list();
+		return new ModelAndView("redirect:/especialidades");
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)

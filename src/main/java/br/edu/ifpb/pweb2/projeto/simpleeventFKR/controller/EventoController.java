@@ -47,10 +47,10 @@ public class EventoController {
 	@RequestMapping(method=RequestMethod.POST)
 	public ModelAndView save(@Valid Evento evento, BindingResult result) {
 		if (result.hasErrors())
-			return form(evento);
+			return new ModelAndView("redirect:/eventos/form");
 		else {
 			eventoDAO.saveAndFlush(evento);
-			return list();
+			return new ModelAndView("recirect:/eventos");
 		}
 	}
 	
