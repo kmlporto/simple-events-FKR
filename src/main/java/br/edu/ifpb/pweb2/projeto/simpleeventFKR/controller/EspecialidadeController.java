@@ -3,10 +3,11 @@ package br.edu.ifpb.pweb2.projeto.simpleeventFKR.controller;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,23 +26,26 @@ public class EspecialidadeController {
 	
 	@RequestMapping("/form")
 	public ModelAndView form(Especialidade especialidade) {
-		ModelAndView modelForm = new ModelAndView("especialidade/form");
-		modelForm.addObject("especialidade", especialidade);
-		return modelForm;
+		return new ModelAndView("especialidade/form");
 	}
 	
-
-	@RequestMapping(method=RequestMethod.POST)
-	public ModelAndView save(Especialidade especialidade) {
+	@RequestMapping(method=RequestMethod.POST, value="/save")
+	public ModelAndView save(@Valid Especialidade especialidade, 
+			BindingResult result, 
+			RedirectAttributes att){
+		if (result.hasErrors()) {
+            return new ModelAndView("/form");
+        }
 		especDAO.saveAndFlush(especialidade);
-		return new ModelAndView("redirect:/especialidades");
+        att.addFlashAttribute("especialidades", especDAO.findAll());
+        return new ModelAndView("redirect:/especialidades");
 	}
-	
+
+
 	@RequestMapping(method=RequestMethod.GET)
 	public ModelAndView list() {
 		ModelAndView modelList = new ModelAndView("especialidade/list");
-		List<Especialidade> especialidade = especDAO.findAll();
-		modelList.addObject("especialidades", especialidade);
+		modelList.addObject("especialidades", especDAO.findAll());
 		return modelList;
 	}
 
@@ -55,12 +59,27 @@ public class EspecialidadeController {
 		return new ModelAndView("redirect:/especialidades");
 	}
 	
-	@RequestMapping(value="/edit/{id}")
+	@RequestMapping(value="/edit/{id}", method=RequestMethod.GET)
 	public ModelAndView edit(@PathVariable("id") Long id, RedirectAttributes att) {
-		ModelAndView modelForm = new ModelAndView("especialidade/form");
+		ModelAndView modelForm = new ModelAndView("especialidade/form-update");
 		modelForm.addObject("especialidade", especDAO.findById(id).get());
-		
 		return modelForm;
+	}
+	
+	@RequestMapping(value="/update/{id}", method=RequestMethod.POST)
+	public ModelAndView update(@PathVariable("id") Long id, 
+			@Valid Especialidade especialidade, 
+			RedirectAttributes att,
+			BindingResult result) {
+	    if (result.hasErrors()) {
+	        especialidade.setId(id);
+	        return new ModelAndView("especialidade/form-update");
+	    }
+	         
+	    especDAO.save(especialidade);
+	    att.addFlashAttribute("especialidades", especDAO.findAll());
+
+        return new ModelAndView("redirect:/especialidades");
 	}
 	
 }

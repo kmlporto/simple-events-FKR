@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.EspecialidadeDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.EventoDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.UserDAO;
+import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Especialidade;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Evento;
 
 @Controller
@@ -39,19 +40,19 @@ public class EventoController {
 	 * **/ 
 	@RequestMapping("/form")
 	public ModelAndView form(Evento evento) {
-		ModelAndView modelForm = new ModelAndView("evento/form");
-		modelForm.addObject("evento", evento);
-		return modelForm;
+		return new ModelAndView("evento/form");
 	}	
 	
-	@RequestMapping(method=RequestMethod.POST)
-	public ModelAndView save(@Valid Evento evento, BindingResult result) {
-		if (result.hasErrors())
-			return new ModelAndView("redirect:/eventos/form");
-		else {
-			eventoDAO.saveAndFlush(evento);
-			return new ModelAndView("recirect:/eventos");
-		}
+	@RequestMapping(method=RequestMethod.POST, value="/save")
+	public ModelAndView save(@Valid Evento evento, 
+			BindingResult result,
+			RedirectAttributes att) {
+		if (result.hasErrors()) {
+            return new ModelAndView("/form");
+        }
+		eventoDAO.saveAndFlush(evento);
+        att.addFlashAttribute("eventos", eventoDAO.findAll());
+        return new ModelAndView("redirect:/eventos");
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
@@ -72,9 +73,25 @@ public class EventoController {
 	}
 	
 	@RequestMapping("/edit/{id}")
-	public ModelAndView edit(@PathVariable("id") Long id) {
-		ModelAndView modelForm = new ModelAndView("evento/form");
-		modelForm.addObject("evento", eventoDAO.findById(id));
+	public ModelAndView edit(@PathVariable("id") Long id, RedirectAttributes att) {
+		ModelAndView modelForm = new ModelAndView("evento/form-update");
+		modelForm.addObject("evento", eventoDAO.findById(id).get());
 		return modelForm;
+	}
+	
+	@RequestMapping(value="/update/{id}", method=RequestMethod.POST)
+	public ModelAndView update(@PathVariable("id") Long id, 
+			@Valid Evento evento, 
+			RedirectAttributes att,
+			BindingResult result) {
+	    if (result.hasErrors()) {
+	    	evento.setId(id);
+	        return new ModelAndView("evento/form-update");
+	    }
+	         
+	    eventoDAO.save(evento);
+	    att.addFlashAttribute("eventos", eventoDAO.findAll());
+
+        return new ModelAndView("redirect:/eventos");
 	}
 }

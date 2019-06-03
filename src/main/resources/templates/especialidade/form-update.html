@@ -14,7 +14,7 @@
 		<br>
 		<h2>Adicionar uma especialidade</h2>
 		<hr>
-		<form th:action="@{/especialidades/save}" th:object="${especialidade}" method="POST">
+		<form th:action="@{/especialidades/update/{id}(id=${especialidade.id})}" th:object="${especialidade}" method="POST">
 			<div class="form-group">
 				<label for="nome">Nome</label> <input type="text"
 					class="form-control" id="nome" name="nome"
