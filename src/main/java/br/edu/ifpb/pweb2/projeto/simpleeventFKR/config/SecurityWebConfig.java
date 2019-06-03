@@ -28,20 +28,16 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests().
 									antMatchers("/",
 												"/usuarios",
-												"/usuarios/*",
+												"/usuarios/**",
 												"/logout").permitAll()
 									//necessario apenas para liberar o acesso ao banco de testes h2-console
 									.and().authorizeRequests().antMatchers("/h2-console/**").permitAll()
 									.and().csrf().ignoringAntMatchers("/h2-console/**")
 									.and().headers().frameOptions().sameOrigin();
 		
-//		http
-//		.authorizeRequests()
-//			.anyRequest().authenticated()
-//			.and()
-//			.httpBasic();
 		super.configure(http);
 	}
+	
 
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
