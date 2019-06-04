@@ -12,7 +12,7 @@
 		<br>
 		<h2>Adicionar Evento</h2>
 		<hr>
-		<form th:action="@{save}" th:object="${evento}" method="POST">
+		<form th:action="@{/eventos/save}" th:object="${evento}" method="POST">
 			<div class="form-row">
 				<div class="form-group col-md-4">
 					<label for="descricao">Descrição</label> 

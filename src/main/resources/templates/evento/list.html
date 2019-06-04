@@ -7,7 +7,7 @@
 <!-- Navbar -->
 <navbar  th:if="${login == null}" th:insert="fragments/navbarLoggedOut :: loggedOut"> </navbar>
 <navbar  th:unless="${login == null}" th:insert="fragments/navbarLoggedIn :: loggedIn"></navbar>
-	<!-- <div th:if="${deletado}" th:text="${deletado}"></div> -->
+	<div th:if="${deletado}" ></div>
 	<div class="container">
 		<br>
 		<h2>Eventos cadastrados</h2>
@@ -28,8 +28,8 @@
 				<td th:text="${evento.data}"></td>
 				<td> 
 					<div class="btn-group pull-right">
-						<a class="btn btn-sm btn-primary" th:href="@{eventos/edit/{id}(id=${evento.id})}" >Editar</a>
-						<a class="delete btn btn-sm btn-danger" th:href="@{eventos/delete/{id}(id=${evento.id})}">Excluir</a>
+						<a class="btn btn-sm btn-primary" th:href="@{/eventos/edit/{id}(id=${evento.id})}" >Editar</a>
+						<a class="delete btn btn-sm btn-danger" th:href="@{/eventos/delete/{id}(id=${evento.id})}">Excluir</a>
 					</div>
 				</td>
 			</tr>
