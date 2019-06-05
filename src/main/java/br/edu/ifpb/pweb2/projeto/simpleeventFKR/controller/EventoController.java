@@ -56,7 +56,6 @@ public class EventoController {
 	@RequestMapping(method=RequestMethod.POST, value="/save")
 	public ModelAndView save(@Valid Evento evento, 
 			BindingResult result,
-			RedirectAttributes att,
 			@RequestParam("especialidades") List<Long> especialidades,
 			@RequestParam("quantidades") List<Integer> quantidades
 			) {
@@ -76,10 +75,8 @@ public class EventoController {
             evento.add(vaga);
             i++;
         }
-        System.out.println(evento.toString());
-		eventoDAO.save(evento);
-        att.addFlashAttribute(eventoDAO.findAll());
-		return new ModelAndView("redirect:/eventos");
+        eventoDAO.save(evento);
+        return new ModelAndView("redirect:/eventos");
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
@@ -116,10 +113,7 @@ public class EventoController {
 	    	evento.setId(id);
 	        return new ModelAndView("evento/form-update");
 	    }
-	         
 	    eventoDAO.save(evento);
-	    att.addFlashAttribute("eventos", eventoDAO.findAll());
-
-        return new ModelAndView("redirect:/eventos");
+	    return new ModelAndView("redirect:/eventos");
 	}
 }
