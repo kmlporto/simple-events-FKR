@@ -18,7 +18,7 @@ public class CandidatoVaga {
 	@ManyToOne
 	private Vaga vaga;
 	private int notaDesempenho;
-	private State state;
+	private Status status;
 	@OneToOne
 	private User candidato;
 
@@ -41,12 +41,12 @@ public class CandidatoVaga {
 		this.notaDesempenho = nota;
 	}
 
-	public State getState() {
-		return state;
+	public Status getStatus() {
+		return status;
 	}
 
-	public void setState(State state) {
-		this.state = state;
+	public void setStatus(Status state) {
+		this.status = state;
 	}
 
 	public User getCandidato() {
@@ -60,7 +60,7 @@ public class CandidatoVaga {
 	@Override
 	public String toString() {
 		return "Candidato_Vaga [id=" + id + ", vaga=" + vaga.getEspecialidade().getNome() + ", nota desempenho=" + notaDesempenho + ", state="
-				+ state + ", candidato=" + candidato.getNome() + "]";
+				+ status + ", candidato=" + candidato.getNome() + "]";
 	}
 	
 

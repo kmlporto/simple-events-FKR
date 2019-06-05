@@ -47,7 +47,7 @@ public class User implements Serializable {
 	private Date datanascimento;
 	
 	/* rela��o com eventos */
-	@OneToMany(mappedBy = "owner", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "dono", cascade = CascadeType.ALL)
 	private List<Evento> eventos = new ArrayList<>();
 	
 	/* relacao com candidato_vaga */

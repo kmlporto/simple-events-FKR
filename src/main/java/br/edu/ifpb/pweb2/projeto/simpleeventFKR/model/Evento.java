@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -37,10 +38,10 @@ public class Evento {
 	
 	/* Relacao com Dono do evento */
 	@ManyToOne
-	private User owner;
+	private User dono;
 	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "evento", cascade = CascadeType.REMOVE, orphanRemoval=true)
-	/* Relacao com as vagas */
+	@ElementCollection
 	private List<Vaga> vagas = new ArrayList<>();
 
 	/* Relacao com avaliacaoEventos*/
@@ -82,12 +83,12 @@ public class Evento {
 		this.vagas.add(vaga);
 	}
 
-	public User getOwner() {
-		return owner;
+	public User getDono() {
+		return dono;
 	}
 
-	public void setOwner(User owner) {
-		this.owner = owner;
+	public void setDono(User owner) {
+		this.dono = owner;
 	}
 
 	public Long getId() {
@@ -126,7 +127,7 @@ public class Evento {
 	@Override
 	public String toString() {
 		return "Evento [id=" + id + ", descricao=" + descricao + ", data=" + data + ", local=" + local + ", owner="
-				+ owner + ", vagas=" + vagas + ", avaliacao eventos=" + avaliacaoEventos + "]";
+				+ dono + ", vagas=" + vagas + ", avaliacao eventos=" + avaliacaoEventos + "]";
 	}
 
 }
