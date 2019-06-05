@@ -34,9 +34,9 @@ public class Evento {
 	@NotNull(message = "Campo obrigatorio")
 	@Future(message = "A data deve estar no futuro")
 	private Date data;
+	
 	private String local;
 	
-	/* Relacao com Dono do evento */
 	@ManyToOne
 	private User dono;
 	
@@ -44,7 +44,6 @@ public class Evento {
 	@ElementCollection
 	private List<Vaga> vagas = new ArrayList<>();
 
-	/* Relacao com avaliacaoEventos*/
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "evento", cascade = CascadeType.ALL)
 	private List<AvaliacaoEvento> avaliacaoEventos = new ArrayList<>();
 
