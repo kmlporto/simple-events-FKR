@@ -10,6 +10,7 @@
 	<navbar th:unless="${login == null}"
 		th:insert="fragments/navbarLoggedIn :: loggedIn"></navbar>
 	<div class="container">
+		<div th:text="${deletado}" ></div>
 		<br>
 		<h2>Especialidades cadastradas</h2>
 		<a th:href="@{/especialidades/form}" class="btn btn-primary">Nova</a>
