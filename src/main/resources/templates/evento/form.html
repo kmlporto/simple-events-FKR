@@ -16,13 +16,13 @@
 			<div class="form-row">
 				<div class="form-group col-md-4">
 					<label for="descricao">Descrição</label> 
-					<input type="text" class="form-control" id="descricao" name="descricao"
+					<input type="text" class="form-control" th:id="descricao" name="descricao"
 						placeholder="Descrição do evento aqui">
 				</div>
 
 				<div class="form-group col-md-4">
 					<label for="local">Local</label> 
-					<input type="text" class="form-control" id="local" name="local" th:field="*{local}">
+					<input type="text" class="form-control" th:id="local" name="local" th:field="*{local}">
 					<p th:if="${#fields.hasErrors('local')}" th:errors="*{local}"></p>
 				</div>
 
@@ -31,13 +31,39 @@
 					<input type="date" class="form-control" id="data" name="data">
 					<p class="danger" th:if="${#fields.hasErrors('data')}" th:errors="*{data}"></p>
 				</div>
+				<div class="form-group col-md-4">
+                    <p>Vagas</p>
+                    <div class="form-row align-items-center">
+                        <div th:each="espec : ${especialidades}">
+                            <div class="col-auto my-1">
+                                <label>
+                                    <input type="checkbox" class="especialidades" 
+                                    name="especialidades" th:value="${espec.id}">
+                                    <span th:text="${espec.nome}"></span>
+                                </label>
+                                <input disabled type="number" name="quantidades"
+                                 class="form-control quantidades">
+                            </div>
+                        </div>
+                    </div>
+                </div>
 			</div>
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</form>
-	</div>
+</div>
 
-
+<script>
+    let especialidades = document.querySelectorAll('.especialidades');
+    let quantidadevagas = document.querySelectorAll('.quantidades');
+    especialidades.forEach( (especialidade, indice) => {
+        especialidade.addEventListener('change', () => {
+            quantidadevagas[indice].disabled = !quantidadevagas[indice].disabled
+        })
+    })
+</script>
 
 <footer th:insert="fragments/footer :: footer"></footer>
+
+
 </body>
 </html>

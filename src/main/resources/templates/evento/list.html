@@ -7,25 +7,25 @@
 <!-- Navbar -->
 <navbar  th:if="${login == null}" th:insert="fragments/navbarLoggedOut :: loggedOut"> </navbar>
 <navbar  th:unless="${login == null}" th:insert="fragments/navbarLoggedIn :: loggedIn"></navbar>
-	<div th:if="${deletado}" ></div>
 	<div class="container">
+		<div th:if="${deletado}" ></div>
 		<br>
 		<h2>Eventos cadastrados</h2>
 		<a th:href="@{/eventos/form}" class="btn btn-primary">Novo</a>
 		<div style="height: 20px"></div>
 		<table class="table table-stripped">
 			<tr>
-				<th>Id</th>
 				<th>Descrição</th>
 				<th>Local</th>
 				<th>Data</th>
+				<th>Vaga</th>
 				<th>Action<th>
 			</tr>
 			<tr th:each="evento: ${eventos}">
-				<td th:text="${evento.id}"></td>
 				<td th:text="${evento.descricao}"></td>
 				<td th:text="${evento.local}"></td>
 				<td th:text="${evento.data}"></td>
+				<td th:text="${evento.vagas}"></td>
 				<td> 
 					<div class="btn-group pull-right">
 						<a class="btn btn-sm btn-primary" th:href="@{/eventos/edit/{id}(id=${evento.id})}" >Editar</a>
