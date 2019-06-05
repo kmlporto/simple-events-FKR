@@ -15,6 +15,7 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
 //	https://o7planning.org/en/11705/create-a-login-application-with-spring-boot-spring-security-jpa
 //	https://blog.algaworks.com/spring-security/
 //	https://www.baeldung.com/spring-boot-security-autoconfiguration
+//	https://stackabuse.com/password-encoding-with-spring-security/
 	
 	@Autowired
 	private UserDetailsSimpleEvent usuarioDetalhes;
@@ -43,6 +44,7 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
 									.and().csrf().ignoringAntMatchers("/h2-console/**")
 									.and().headers().frameOptions().sameOrigin();
 		
+	super.configure(http);
 	}
 	
 
