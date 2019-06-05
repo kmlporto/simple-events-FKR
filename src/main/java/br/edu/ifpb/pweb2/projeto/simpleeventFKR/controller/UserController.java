@@ -3,12 +3,13 @@ package br.edu.ifpb.pweb2.projeto.simpleeventFKR.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.UserDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.User;
@@ -20,11 +21,13 @@ public class UserController {
 	@Autowired
 	public UserDAO dao;
 	
+    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	
 	@RequestMapping(method=RequestMethod.GET)
 	public ModelAndView list() {
-		ModelAndView model = new ModelAndView("user/list");
-		model.addObject("usuarios", dao.findAll());
-		return model;
+		ModelAndView modelList = new ModelAndView("user/list");
+		modelList.addObject("usuarios", dao.findAll());
+		return modelList;
 	}
 	
 	
@@ -32,7 +35,8 @@ public class UserController {
 	public ModelAndView save(@Valid User user, BindingResult  bindingResult) {
 		if (bindingResult.hasErrors())
 			return form(user);
-		else { 
+		else {
+			user.setSenha(passwordEncoder.encode(user.getSenha()));
 			dao.save(user);
 			return list();
 		}
