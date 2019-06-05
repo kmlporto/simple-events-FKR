@@ -19,7 +19,7 @@ public class UserDetailsSimpleEvent implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		User usuario = daoUser.findByEmail(username);
+		UserDetails usuario = daoUser.findByEmail(username);
 //		String role;
 		
 		if(usuario == null) {
@@ -36,8 +36,12 @@ public class UserDetailsSimpleEvent implements UserDetailsService {
 //		}
 			
 //		UserDetails userDetails = (UserDetails) new User(usuario.getNome(),usuario.getSenha(),grantList);
+
+//		UserDetails userDetails = (UserDetails) usuario;
+		
 		
 		return usuario;
+//		return userDetails;
 	}
 	
 	

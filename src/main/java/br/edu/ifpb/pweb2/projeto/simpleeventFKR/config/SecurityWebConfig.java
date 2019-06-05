@@ -27,7 +27,7 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
 		//paginas que nao precisam de login
 		http.authorizeRequests().
 									antMatchers("/",
-												"/usuarios",
+//												"/usuarios",
 												"/usuarios/**",
 												"/logout").permitAll()
 									//necessario apenas para liberar o acesso ao banco de testes h2-console

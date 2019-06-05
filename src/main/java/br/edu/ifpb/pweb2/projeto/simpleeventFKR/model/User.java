@@ -38,12 +38,12 @@ public class User implements UserDetails {
 	@NotEmpty(message = "Nome e obrigatorio")
 	private String nome;
 
-	@Pattern(regexp = "^\\([1-9]{2}\\) (?:[2-8]|9[1-9])[0-9]{3}\\-[0-9]{4}$", message = "Informe um telefone [(83) 98892-1223]")
+//	@Pattern(regexp = "^\\([1-9]{2}\\) (?:[2-8]|9[1-9])[0-9]{3}\\-[0-9]{4}$", message = "Informe um telefone [(83) 98892-1223]")
 	private String telefone;
 	
 	private String email;
 	
-	@Size(min = 8, message = "a senha deve conter no minino 8 caracteres")
+//	@Size(min = 8, message = "a senha deve conter no minino 8 caracteres")
 	private String senha;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
