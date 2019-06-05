@@ -1,6 +1,5 @@
 package br.edu.ifpb.pweb2.projeto.simpleeventFKR.controller;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
