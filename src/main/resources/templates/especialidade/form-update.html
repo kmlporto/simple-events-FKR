@@ -16,14 +16,16 @@
 		<hr>
 		<form th:action="@{/especialidades/update/{id}(id=${especialidade.id})}" th:object="${especialidade}" method="POST">
 			<div class="form-group">
-				<label for="nome">Nome</label> <input type="text"
+				<label for="nome">Nome</label> 
+				<input type="text"
 					class="form-control" id="nome" name="nome"
-					th:value="${especialidade.nome}" placeholder="Nome da especialidade">
+					th:field="*{nome}" placeholder="Nome da especialidade">
 			</div>
 			<div class="form-group">
-				<label for="descricao">Descricao</label> <input type="text"
+				<label for="descricao">Descricao</label> 
+				<input type="text"
 					class="form-control" id="descricao" name="descricao"
-					th:value="${especialidade.descricao}" placeholder="Descricao da especialidade">
+					th:field="*{descricao}" placeholder="Descricao da especialidade">
 			</div>
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</form>
