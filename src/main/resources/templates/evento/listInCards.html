@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+
+	<div th:fragment = "lisEventsCards" class="album py-5 bg-light">
+	    <div class="container">
+	   		<div class="row"> 
+	   		<!-- th:if="${eventos != null}"> --> 
+	   		<!-- && not #list.isEmpty(eventos)}"> -->
+	       		<div th:each="evento : ${eventos}" class="col-md-4">
+		          <div class="card mb-4 shadow-sm">
+		            <p th:text="${evento.descricao}"/>
+		            <div>
+		             <small th:text="${evento.local}"></small>
+		            </div>
+		            <div class="card-body">
+		              <p th:text="${evento.vagas}" class="card-text"/>
+		              <div class="d-flex justify-content-between align-items-center">
+		                <div class="btn-group">
+		                  <a th:href="@{/eventos/edit/{id}(id=${evento.id})}" class="btn btn-sm btn-outline-secondary">+detalhes</a>
+		                  <button type="button" class="btn btn-sm btn-outline-secondary">Candidatar</button>
+		                </div>
+		                <small th:text="${evento.data}" class="text-muted"></small>
+		              </div>
+		            </div>
+		          </div>
+	       		</div>        
+			</div>
+			<!-- <h2
+			th:unless="${eventos != null}"> 
+			|| #list.isEmpty(eventos)}">
+			Sem eventos para exibir</h2> -->
+	  	</div>
+  	</div>
+</html>
