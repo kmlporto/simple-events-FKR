@@ -17,7 +17,7 @@
 
     <!-- Form de Create -->
     <form
-            th:if="${especialidade == null}"
+            th:if="${especialidade.id == null}"
             th:action="@{/especialidades/save}"
             th:object="${especialidade}"
             method="POST"
@@ -35,7 +35,7 @@
 
     <!-- Form de Update -->
     <form
-            th:unless="${especialidade == null}"
+            th:unless="${especialidade.id == null}"
             th:action="@{/especialidades/update/{id}(id=${especialidade.id})}"
             th:object="${especialidade}"
             method="POST"

@@ -24,7 +24,7 @@ public class EspecialidadeController {
 	private EspecialidadeDAO especDAO;
 	
 	@RequestMapping("/form")
-	public ModelAndView form() {
+	public ModelAndView form(Especialidade especialidade) {
 		ModelAndView model = new ModelAndView("especialidade/form");
 		return model;
 	}

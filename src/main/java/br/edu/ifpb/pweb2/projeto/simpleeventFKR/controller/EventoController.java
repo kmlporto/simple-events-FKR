@@ -101,7 +101,7 @@ public class EventoController {
 	
 	@RequestMapping("/edit/{id}")
 	public ModelAndView edit(@PathVariable("id") Long id) {
-		ModelAndView modelForm = new ModelAndView("evento/form-update");
+		ModelAndView modelForm = new ModelAndView("evento/form");
 		modelForm.addObject("especialidades", especDAO.findAll());
 		modelForm.addObject("evento", eventoDAO.findById(id).get());
 		return modelForm;
@@ -114,7 +114,7 @@ public class EventoController {
 			BindingResult result) {
 	    if (result.hasErrors()) {
 	    	evento.setId(id);
-	        return new ModelAndView("evento/form-update");
+	        return new ModelAndView("evento/form");
 	    }
 	         
 	    eventoDAO.save(evento);
