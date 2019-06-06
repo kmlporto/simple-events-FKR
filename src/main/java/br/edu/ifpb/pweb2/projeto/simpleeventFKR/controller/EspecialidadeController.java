@@ -1,6 +1,5 @@
 package br.edu.ifpb.pweb2.projeto.simpleeventFKR.controller;
 
-import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -25,8 +24,9 @@ public class EspecialidadeController {
 	private EspecialidadeDAO especDAO;
 	
 	@RequestMapping("/form")
-	public ModelAndView form(Especialidade especialidade) {
-		return new ModelAndView("especialidade/form");
+	public ModelAndView form() {
+		ModelAndView model = new ModelAndView("especialidade/form");
+		return model;
 	}
 	
 	@RequestMapping(method=RequestMethod.POST, value="/save")
@@ -61,7 +61,7 @@ public class EspecialidadeController {
 	
 	@RequestMapping(value="/edit/{id}", method=RequestMethod.GET)
 	public ModelAndView edit(@PathVariable("id") Long id, RedirectAttributes att) {
-		ModelAndView modelForm = new ModelAndView("especialidade/form-update");
+		ModelAndView modelForm = new ModelAndView("especialidade/form");
 		modelForm.addObject("especialidade", especDAO.findById(id).get());
 		return modelForm;
 	}
@@ -73,7 +73,7 @@ public class EspecialidadeController {
 			BindingResult result) {
 	    if (result.hasErrors()) {
 	        especialidade.setId(id);
-	        return new ModelAndView("especialidade/form-update");
+	        return new ModelAndView("especialidade/form");
 	    }
 	         
 	    especDAO.save(especialidade);
