@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.EspecialidadeDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.EventoDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.UserDAO;
+import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.VagaDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Especialidade;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Evento;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Vaga;
@@ -28,10 +29,15 @@ public class EventoController {
 	
 	@Autowired 
 	public EventoDAO eventoDAO;
+	
 	@Autowired
 	public UserDAO userDAO;
+	
 	@Autowired
 	public EspecialidadeDAO especDAO;
+	
+	@Autowired
+	public VagaDAO vagaDAO;
 	
 	/**ROUTES
 	 * form (@RequestMapping("/form"))
@@ -50,13 +56,13 @@ public class EventoController {
 	@RequestMapping(method=RequestMethod.POST, value="/save")
 	public ModelAndView save(@Valid Evento evento, 
 			BindingResult result,
-			RedirectAttributes att,
 			@RequestParam("especialidades") List<Long> especialidades,
 			@RequestParam("quantidades") List<Integer> quantidades
 			) {
 		if (result.hasErrors()) {
             return new ModelAndView("/form");
         }
+		eventoDAO.save(evento);
 		Optional<Especialidade> esp;
         int i = 0;
         for (Long id : especialidades) {
@@ -65,12 +71,12 @@ public class EventoController {
             vaga.setEspecialidade(esp.get());
             vaga.setQtdVagas(quantidades.get(i));
             vaga.setEvento(evento);
+            vagaDAO.save(vaga);
             evento.add(vaga);
             i++;
         }
-		eventoDAO.saveAndFlush(evento);
-        att.addFlashAttribute(eventoDAO.findAll());
-		return new ModelAndView("redirect:/eventos");
+        eventoDAO.save(evento);
+        return new ModelAndView("redirect:/eventos");
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
@@ -107,10 +113,7 @@ public class EventoController {
 	    	evento.setId(id);
 	        return new ModelAndView("evento/form-update");
 	    }
-	         
 	    eventoDAO.save(evento);
-	    att.addFlashAttribute("eventos", eventoDAO.findAll());
-
-        return new ModelAndView("redirect:/eventos");
+	    return new ModelAndView("redirect:/eventos");
 	}
 }

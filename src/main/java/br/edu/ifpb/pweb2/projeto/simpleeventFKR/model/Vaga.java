@@ -20,11 +20,15 @@ public class Vaga {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	@ManyToOne
 	private Evento evento;
+	
 	private int qtdVagas;
+	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "vaga", cascade = CascadeType.ALL)
 	private List<CandidatoVaga> candidatoVaga = new ArrayList<>();
+	
 	@OneToOne
 	private Especialidade especialidade;
 	
@@ -75,12 +79,4 @@ public class Vaga {
 		return "Vaga [id=" + id + ", evento=" + evento.getDescricao() + ", qtd vagas=" + qtdVagas+
 				", especialidade=" + especialidade.getNome() + "]";
 	}
-	
-	
-	
-	
-	
-	
-	
-
 }

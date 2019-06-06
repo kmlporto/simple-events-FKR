@@ -17,7 +17,7 @@
 				<div class="form-group col-md-4">
 					<label for="descricao">Descrição</label> 
 					<input type="text" class="form-control" id="descricao" name="descricao"
-						th:value="${evento.descricao}" placeholder="Descrição do evento aqui">
+						th:field="*{descricao}" placeholder="Descrição do evento aqui">
 				</div>
 
 				<div class="form-group col-md-4">
@@ -28,7 +28,7 @@
 
 				<div class="form-group col-md-4">
 					<label for="data">Data</label> 
-					<input type="date" class="form-control" id="data" name="data">
+					<input type="date" class="form-control" id="data" name="data" th:field="*{data}">
 					<p class="danger" th:if="${#fields.hasErrors('data')}" th:errors="*{data}"></p>
 				</div>
 			</div>
