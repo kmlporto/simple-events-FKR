@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/head.html :: head">
+</head>
+<body>
+
+<!-- Navbar -->
+	<div th:replace="fragments/navbar"></div>
+    
+    <div class="container">
+    	<h2>Se candidatar a evento</h2>
+    	<div class="container">
+    		<h3>Dados do evento:</h3>
+    		<h5 th:text="${evento.descricao}"></h5>
+    		<p th:text="${evento.local}"></p>
+    		<input th:value="{evento.data}" type="date" disable>
+    	</div>
+    	
+    
+    
+    </div>
+
+
+<footer th:insert="fragments/footer :: footer"></footer>
+</body>
+</html>
