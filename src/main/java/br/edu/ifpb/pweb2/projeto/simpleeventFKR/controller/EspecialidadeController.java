@@ -58,19 +58,20 @@ public class EspecialidadeController {
 	
 	@RequestMapping(value="/edit/{id}", method=RequestMethod.GET)
 	public ModelAndView edit(@PathVariable("id") Long id, RedirectAttributes att) {
-		ModelAndView modelForm = new ModelAndView("especialidade/form-update");
+		ModelAndView modelForm = new ModelAndView("especialidade/form");
 		modelForm.addObject("especialidade", especDAO.findById(id).get());
 		return modelForm;
 	}
 	
 	@RequestMapping(value="/update/{id}", method=RequestMethod.POST)
 	public ModelAndView update(@PathVariable("id") Long id, 
-			@Valid Especialidade especialidade, 
+			@Valid Especialidade especialidade,
 			BindingResult result) {
 	    if (result.hasErrors()) {
 	        especialidade.setId(id);
-	        return new ModelAndView("especialidade/form-update");
-	    }	         
+	        return new ModelAndView("especialidade/form");
+	    }
+	         
 	    especDAO.save(especialidade);
         return new ModelAndView("redirect:/especialidades");
 	}

@@ -8,24 +8,49 @@
     <div th:replace="fragments/navbar"></div>null}"
 		th:insert="fragments/navbarLoggedIn :: loggedIn"></navbar>
 
-	<div class="container">
-		<br>
-		<h2>Adicionar uma especialidade</h2>
-		<hr>
-		<form th:action="@{/especialidades/save}" th:object="${especialidade}" method="POST">
-			<div class="form-group">
-				<label for="nome">Nome</label> <input type="text"
-					class="form-control" id="nome" name="nome"
-					placeholder="Nome da especialidade">
-			</div>
-			<div class="form-group">
-				<label for="descricao">Descricao</label> <input type="text"
-					class="form-control" id="descricao" name="descricao"
-					placeholder="Descricao da especialidade">
-			</div>
-			<button type="submit" class="btn btn-primary">Submit</button>
-		</form>
-	</div>
-	<footer th:insert="fragments/footer :: footer"></footer>
+<div class="container">
+    <br>
+    <h2>Especialidade</h2>
+    <hr>
+
+    <!-- Form de Create -->
+    <form
+            th:if="${especialidade.id == null}"
+            th:action="@{/especialidades/save}"
+            th:object="${especialidade}"
+            method="POST"
+    >
+        <div class="form-group">
+            <label for="nome">Nome</label>
+            <input type="text" class="form-control" name="nome" placeholder="Nome da especialidade">
+        </div>
+        <div class="form-group">
+            <label for="descricao">Descricao</label>
+            <input type="text" class="form-control" name="descricao" placeholder="Descricao da especialidade">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <!-- Form de Update -->
+    <form
+            th:unless="${especialidade.id == null}"
+            th:action="@{/especialidades/update/{id}(id=${especialidade.id})}"
+            th:object="${especialidade}"
+            method="POST"
+    >
+        <div class="form-group">
+            <label for="nome">Nome</label>
+            <input type="text" class="form-control" id="nome" name="nome"
+                   th:value="${especialidade.nome}" placeholder="Nome da especialidade">
+        </div>
+        <div class="form-group">
+            <label for="descricao">Descricao</label>
+            <input type="text" class="form-control" id="descricao" name="descricao"
+                   th:value="${especialidade.descricao}" placeholder="Descricao da especialidade">
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+<footer th:insert="fragments/footer :: footer"></footer>
 </body>
 </html>

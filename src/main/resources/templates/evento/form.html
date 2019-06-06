@@ -8,47 +8,73 @@
     <div th:replace="fragments/navbar"></div>
 
 <div class="container">
-		<br>
-		<h2>Adicionar Evento</h2>
-		<hr>
-		<form th:action="@{/eventos/save}" th:object="${evento}" method="POST">
-			<div class="form-row">
-				<div class="form-group col-md-4">
-					<label for="descricao">Descrição</label> 
-					<input type="text" class="form-control" th:id="descricao" name="descricao"
-						placeholder="Descrição do evento aqui">
-				</div>
+    <br>
+    <h2>Adicionar Evento</h2>
+    <hr>
+    <!-- Form de Create -->
+    <form th:if="${evento.id == null}" th:action="@{/eventos/save}" th:object="${evento}" method="POST">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="descricao">Descrição</label>
+                <input type="text" class="form-control" th:id="descricao" name="descricao"
+                       placeholder="Descrição do evento aqui">
+            </div>
 
-				<div class="form-group col-md-4">
-					<label for="local">Local</label> 
-					<input type="text" class="form-control" th:id="local" name="local" th:field="*{local}">
-					<p th:if="${#fields.hasErrors('local')}" th:errors="*{local}"></p>
-				</div>
+            <div class="form-group col-md-4">
+                <label for="local">Local</label>
+                <input type="text" class="form-control" th:id="local" name="local" th:field="*{local}">
+                <p th:if="${#fields.hasErrors('local')}" th:errors="*{local}"></p>
+            </div>
 
-				<div class="form-group col-md-4">
-					<label for="data">Data</label> 
-					<input type="date" class="form-control" id="data" name="data">
-					<p class="danger" th:if="${#fields.hasErrors('data')}" th:errors="*{data}"></p>
-				</div>
-				<div class="form-group col-md-4">
-                    <p>Vagas</p>
-                    <div class="form-row align-items-center">
-                        <div th:each="espec : ${especialidades}">
-                            <div class="col-auto my-1">
-                                <label>
-                                    <input type="checkbox" class="especialidades" 
-                                    name="especialidades" th:value="${espec.id}">
-                                    <span th:text="${espec.nome}"></span>
-                                </label>
-                                <input disabled type="number" name="quantidades"
-                                 class="form-control quantidades">
-                            </div>
+            <div class="form-group col-md-4">
+                <label for="data">Data</label>
+                <input type="date" class="form-control" id="data" name="data">
+                <p class="danger" th:if="${#fields.hasErrors('data')}" th:errors="*{data}"></p>
+            </div>
+            <div class="form-group col-md-4">
+                <p>Vagas</p>
+                <div class="form-row align-items-center">
+                    <div th:each="espec : ${especialidades}">
+                        <div class="col-auto my-1">
+                            <label>
+                                <input type="checkbox" class="especialidades"
+                                       name="especialidades" th:value="${espec.id}">
+                                <span th:text="${espec.nome}"></span>
+                            </label>
+                            <input disabled type="number" name="quantidades"
+                                   class="form-control quantidades">
                         </div>
                     </div>
                 </div>
-			</div>
-			<button type="submit" class="btn btn-primary">Submit</button>
-		</form>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+
+    <!-- Form de Update -->
+    <form th:unless="${evento.id == null}" th:action="@{/eventos/update/{id}(id=${evento.id})}" th:object="${evento}"
+          method="POST">
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="descricao">Descrição</label>
+                <input type="text" class="form-control" id="descricao" name="descricao"
+                       th:value="${evento.descricao}" placeholder="Descrição do evento aqui">
+            </div>
+
+            <div class="form-group col-md-4">
+                <label for="local">Local</label>
+                <input type="text" class="form-control" id="local" name="local" th:field="*{local}">
+                <p th:if="${#fields.hasErrors('local')}" th:errors="*{local}"></p>
+            </div>
+
+            <div class="form-group col-md-4">
+                <label for="data">Data</label>
+                <input type="date" class="form-control" id="data" name="data">
+                <p class="danger" th:if="${#fields.hasErrors('data')}" th:errors="*{data}"></p>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
 </div>
 
 <script>
