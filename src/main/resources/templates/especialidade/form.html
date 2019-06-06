@@ -4,10 +4,8 @@
 </head>
 <body>
 
-	<!-- Navbar -->
-	<navbar th:if="${login == null}"
-		th:insert="fragments/navbarLoggedOut :: loggedOut"> </navbar>
-	<navbar th:unless="${login == null}"
+		<!-- Navbar -->
+    <div th:replace="fragments/navbar"></div>null}"
 		th:insert="fragments/navbarLoggedIn :: loggedIn"></navbar>
 
 	<div class="container">

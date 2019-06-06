@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
+    <div th:fragment = "navbar">
+    
+	    <th:block sec:authorize="isAnonymous()">
+	    	<th:block th:replace="fragments/navbarLoggedOut :: loggedOut"></th:block>
+	  	</th:block>
+	    <th:block sec:authorize="isAuthenticated()">
+	     <th:block th:replace="fragments/navbarLoggedIn :: loggedIn"></th:block>
+	    </th:block>
+    </div> 
+</html>

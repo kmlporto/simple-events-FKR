@@ -1,14 +1,17 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+>
 <head th:insert="fragments/head.html :: head">
 </head>
 <body>
 
     <!-- Navbar -->
-    <navbar  th:if="${login == null}" th:insert="fragments/navbarLoggedOut :: loggedOut"> </navbar>
-    <navbar  th:unless="${login == null}" th:insert="fragments/navbarLoggedIn :: loggedIn"></navbar>
-    <div th:replace="evento/listInCards"/>
-    
+    <div th:replace="fragments/navbar"></div>
+
+
+    <div th:replace="evento/listInCards"></div>
+       
 
     <footer th:insert="fragments/footer :: footer"></footer>
 </body>

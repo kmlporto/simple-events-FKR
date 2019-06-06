@@ -5,8 +5,8 @@
 <body>
 
 <!-- Navbar -->
-<navbar  th:if="${login == null}" th:insert="fragments/navbarLoggedOut :: loggedOut"> </navbar>
-<navbar  th:unless="${login == null}" th:insert="fragments/navbarLoggedIn :: loggedIn"></navbar>
+    <div th:replace="fragments/navbar"></div>
+    
 	<div class="container">
 		<div th:if="${deletado}" ></div>
 		<br>

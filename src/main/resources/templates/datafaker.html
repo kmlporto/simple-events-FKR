@@ -3,9 +3,8 @@
 <head th:insert="fragments/head.html :: head">
 </head>
 <body>
-    <!-- Navbar -->
-    <navbar  th:if="${login == null}" th:insert="fragments/navbarLoggedOut :: loggedOut"> </navbar>
-    <navbar  th:unless="${login == null}" th:insert="fragments/navbarLoggedIn :: loggedIn"></navbar>
+   <!-- Navbar -->
+    <div th:replace="fragments/navbar"></div>
 
     <h1>Dados criados com Sucesso!</h1>
 

@@ -23,7 +23,6 @@ public class IndexController {
 
     @RequestMapping(method = RequestMethod.GET)
     public String showIndex (Model model) {
-//        model.addAttribute("login", "s");
     	model.addAttribute("eventos", eventoDAO.findAll());
         return "index.html";
     }
