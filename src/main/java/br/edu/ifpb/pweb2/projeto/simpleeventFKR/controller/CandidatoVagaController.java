@@ -63,13 +63,13 @@ public class CandidatoVagaController {
 	
 	@RequestMapping("/delete/{id}")
 	public ModelAndView delete(@PathVariable("id") Long id, RedirectAttributes att) {
-		Optional<CandidatoVaga> trabalho = candidatoVagaDAO.findById(id);
+		CandidatoVaga trabalho = candidatoVagaDAO.findById(id).get();
+		Vaga vaga = vagaDAO.findById(trabalho.getVaga().getId()).get();
 		if (trabalho != null) {
-//			candidatoVagaDAO.delete(trabalho.get());
+			vaga.remove(trabalho);
 			candidatoVagaDAO.deleteById(id);
 			att.addFlashAttribute("deletado", "Evento deletado com sucesso!");
-			att.addFlashAttribute("mensagem", "Evento deletado com sucesso!");
-			
+			att.addFlashAttribute("mensagem", "Evento deletado com sucesso!");			
 		}
 		return new ModelAndView("redirect:/meustrabalhos");
 	}

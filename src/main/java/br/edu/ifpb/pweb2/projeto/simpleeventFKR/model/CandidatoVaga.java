@@ -25,19 +25,13 @@ public class CandidatoVaga {
 	public CandidatoVaga() {
 	};
 	
-	
-
 	public Long getId() {
 		return id;
 	}
 
-
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-
 
 	public Vaga getVaga() {
 		return vaga;
@@ -76,6 +70,5 @@ public class CandidatoVaga {
 		return "Candidato_Vaga [id=" + id + ", vaga=" + vaga.getEspecialidade().getNome() + ", nota desempenho=" + notaDesempenho + ", state="
 				+ status + ", candidato=" + candidato.getNome() + "]";
 	}
-	
 
 }

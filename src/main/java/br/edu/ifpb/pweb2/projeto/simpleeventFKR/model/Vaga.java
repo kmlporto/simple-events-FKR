@@ -74,6 +74,14 @@ public class Vaga {
 		this.candidatoVaga = candidato;
 	}
 
+	public void add(CandidatoVaga candidato) {
+		this.candidatoVaga.add(candidato);
+	}
+	
+	public void remove(CandidatoVaga candidato) {
+		this.candidatoVaga.remove(candidato);
+	}
+	
 	@Override
 	public String toString() {
 		return "Vaga [id=" + id + ", evento=" + evento.getDescricao() + ", qtd vagas=" + qtdVagas+
