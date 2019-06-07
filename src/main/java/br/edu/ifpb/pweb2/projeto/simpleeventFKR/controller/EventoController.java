@@ -1,5 +1,7 @@
 package br.edu.ifpb.pweb2.projeto.simpleeventFKR.controller;
 
+import java.security.Principal;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,19 +10,24 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.CandidatoVagaDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.EspecialidadeDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.EventoDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.UserDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.VagaDAO;
+import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.CandidatoVaga;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Especialidade;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Evento;
+import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Status;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Vaga;
 
 @Controller
@@ -38,6 +45,9 @@ public class EventoController {
 	
 	@Autowired
 	public VagaDAO vagaDAO;
+	
+	@Autowired
+	public CandidatoVagaDAO candidatoVagaDAO;
 	
 	/**ROUTES
 	 * form (@RequestMapping("/form"))
@@ -115,5 +125,68 @@ public class EventoController {
 	    }
 	    eventoDAO.save(evento);
 	    return new ModelAndView("redirect:/eventos");
+	}
+	
+	@GetMapping("/candidatar/{id}")
+	public ModelAndView exibirCandidatar (@PathVariable("id") Long id) {
+		Evento evento = eventoDAO.findById(id).get();
+		List<Especialidade> especialidadesdisponiveis = new ArrayList<Especialidade>();
+		ModelAndView modelForm = new ModelAndView("evento/candidatarEvento");
+		modelForm.addObject("evento", evento);
+		for (Vaga vaga : this.getVagasDisponiveis(evento)) {
+			especialidadesdisponiveis.add(vaga.getEspecialidade());
+		}
+		modelForm.addObject("especialidades", especialidadesdisponiveis);
+		return modelForm;
+	}
+		
+	@PostMapping("/candidatar/{id}")
+	public ModelAndView candidatar (@PathVariable("id") Long id,
+			@RequestParam("especialidades") List<Long> especialidades,
+			Principal user,
+			RedirectAttributes att) {
+		Evento evento = eventoDAO.getOne(id);
+		CandidatoVaga candidatoVaga;
+		Boolean vagaValida=false;
+		
+		for (Long especialidade : especialidades) {
+			vagaValida=false;
+			for (Vaga vaga : this.getVagasDisponiveis(evento)) {	
+				if(vaga.getEspecialidade().getId() == especialidade) {
+					candidatoVaga = new CandidatoVaga();
+					candidatoVaga.setVaga(vaga);
+					candidatoVaga.setStatus(Status.NAO_AVALIADO);
+					candidatoVaga.setCandidato(userDAO.findByEmail(user.getName()));
+					candidatoVagaDAO.save(candidatoVaga);
+					vagaValida = true;
+				}
+			}
+			if(!vagaValida) {
+				att.addFlashAttribute("mensagemerro",String.format("Não foi possivel se candidatar a vaga %s: VAGA JÁ ESGOTADA!",
+						especDAO.findById(especialidade).get().getNome()));
+			}
+			
+		}
+		att.addFlashAttribute("mensagem", "Se tornou candidato com sucesso!");
+		
+		return new ModelAndView("redirect:/");
+	}
+	
+	private List<Vaga> getVagasDisponiveis (Evento evento) {
+		List<Vaga> vagas = evento.getVagas();
+		List<Vaga> vagasdisponiveis = new ArrayList<Vaga>();
+		
+		for (Vaga vaga : vagas) {
+			int qntAprovadoPendente = 0;
+			for (CandidatoVaga candidatoVaga : vaga.getCandidatoVaga()) {
+				if(candidatoVaga.getStatus().name().equals("APROVADO") || candidatoVaga.getStatus().name().equals("NAO_AVALIADO")) {
+					qntAprovadoPendente ++;
+				}
+			}
+			if(vaga.getQtdVagas()>qntAprovadoPendente) {
+				vagasdisponiveis.add(vaga);
+			}
+		}
+		return vagasdisponiveis;
 	}
 }

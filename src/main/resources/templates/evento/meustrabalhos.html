@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/head.html :: head">
+</head>
+<body>
+
+<!-- Navbar -->
+    <div th:replace="fragments/navbar"></div>
+    
+	<div class="container">
+		<div th:if="${deletado}" >
+			<div th:replace="fragments/mensagens"></div>
+		</div>
+		<br>
+		<h2>Meus trabalhos</h2>
+		<div style="height: 20px"></div>
+		<table class="table table-stripped">
+			<tr>
+				<th>Descrição</th>
+				<th>Local</th>
+				<th>Data</th>
+				<th>Especialidade</th>
+				<th>Status</th>
+				<th>Action<th>
+			</tr>
+			<tr th:each="trabalho: ${trabalhos}">
+				<td th:text="${trabalho.vaga.evento.descricao}"></td>
+				<td th:text="${trabalho.vaga.evento.local}"></td>
+				<td th:text="${trabalho.vaga.evento.data}"></td>
+				<td th:text="${trabalho.vaga.especialidade.nome}"></td>
+				<td th:text="${trabalho.status}"></td>
+				<td> 
+					<div class="btn-group pull-right">
+						<a class="btn btn-sm btn-primary" href=# >Avaliar</a>
+						<a class="delete btn btn-sm btn-danger" th:href="@{/meustrabalhos/delete/{id}(id=${trabalho.id})}">Desistir</a>
+					</div>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+<footer th:insert="fragments/footer :: footer"></footer>
+</body>
+</html>
