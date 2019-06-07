@@ -30,7 +30,7 @@
 				<td th:text="${evento.descricao}"></td>
 				<td th:text="${evento.local}"></td>
 				<td th:text="${evento.data}"></td>
-				<td th:each="${evento.vagas}"></td>
+				<td th:text="${evento.vagas}"></td>
 				<td th:text="${evento.dono.nome}"></td>
 				<td>
 					<div class="btn-group pull-right" th:if="${evento.dono.id != userLog.id}">
