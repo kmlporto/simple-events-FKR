@@ -110,9 +110,12 @@ public class EventoController {
 	}
 	
 	@RequestMapping(method=RequestMethod.GET, value="/{id}")
-	public ModelAndView detail(@PathVariable("id") Long id) {
+	public ModelAndView detail(@PathVariable("id") Long id,
+			Authentication auth) {
 		Evento evento = eventoDAO.findById(id).get();
+		User usuarioLogado = userDAO.findByEmail(auth.getName());
 		ModelAndView modelDetail = new ModelAndView("evento/detail");
+		modelDetail.addObject("userLog", usuarioLogado);
 		modelDetail.addObject("evento", evento);
 		return modelDetail;
 	}

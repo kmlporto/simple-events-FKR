@@ -10,30 +10,29 @@
 		<h2>Detalhes do Evento</h2>
 		<hr>		
 		<div class="card">
-		  <h5 th:text="${evento.descricao}" class="card-header"></h5>
-		  <h5 class="card-title" th:text="${evento.local}"></h5>
-		  <p class="card-text" th:text="${evento.data}"></p>
-		    
-		  <div class="card-body row">
-		    <div th:each="vaga : ${evento.vagas}" class="col-md-4">
-		          <div class="card mb-4 shadow-sm">
-		            <p th:text="${vaga.especialidade.nome}"/>
-		            <div>
-		             	<small th:text="${vaga.especialidade.descricao}"></small>
-		            </div>
-		            <p th:text="${vaga.qtdVagas}" class="card-text"/>
-		            <div class="d-flex justify-content-between align-items-center">
-		               <div class="btn-group">
-		               <button class="btn btn-sm btn-outline-secondary">Teste</button>
-		                  <!-- <a 
-		                  	th:href="@{/eventos/{id}(id=${evento.id})/vaga/{id}(id=${evento.vaga.id)}" 
-		                  	class="btn btn-sm btn-outline-secondary">Candidatar</a> -->
-		        </div>
-	       	</div>
-		</div>
-	</div>
+			<h5 th:text="${evento.descricao}" class="card-header"></h5>
+		  	<h5 class="card-title" th:text="${evento.local}"></h5>
+		  	<p class="card-text" th:text="${evento.data}"></p>	    
+		  	<div class="card-body row">
+		    	<div th:each="vaga : ${evento.vagas}" class="col-md-4">
+		        	<div class="card mb-4 shadow-sm">
+		            	<p th:text="${vaga.especialidade.nome}"/>
+		            	<div>
+		             		<small th:text="${vaga.especialidade.descricao}"></small>
+		            	</div>
+		            	<p th:text="${vaga.qtdVagas}" class="card-text"/>
+		            	<div class="d-flex justify-content-between align-items-center">
+							<div class="btn-group pull-right" th:if="${evento.dono.id != userLog.id}">
+			               		<a th:href="@{/eventos/candidatar/{id}(id=${evento.id})}" class="btn btn-sm btn-outline-secondary">Candidatar</a>
+			        		</div>
+		        		</div>
+	       			</div>
+				</div>
+			</div>
+       	</div>
+   	</div>
 
-<footer th:insert="fragments/footer :: footer"></footer>
+	<footer th:insert="fragments/footer :: footer"></footer>
 
 </body>
 </html>
