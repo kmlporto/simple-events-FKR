@@ -91,16 +91,33 @@ public class EventoController {
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public ModelAndView list() {
+	public ModelAndView list(Authentication auth) {
 		ModelAndView modelList = new ModelAndView("evento/list");
+		User usuarioLogado = userDAO.findByEmail(auth.getName());
+		modelList.addObject("userLog", usuarioLogado);
 		modelList.addObject("eventos", eventoDAO.findAll());
 		return modelList;
 	}
 	
+	@RequestMapping(method=RequestMethod.GET, value="/{id}")
+	public ModelAndView detail(@PathVariable("id") Long id) {
+		Evento evento = eventoDAO.findById(id).get();
+		ModelAndView modelDetail = new ModelAndView("evento/detail");
+		modelDetail.addObject("evento", evento);
+		return modelDetail;
+	}
+		
 	@RequestMapping("/delete/{id}")
-	public ModelAndView delete(@PathVariable("id") Long id, RedirectAttributes att) {
-		Optional<Evento> optionalEvento = eventoDAO.findById(id);
-		if (optionalEvento != null) {
+	public ModelAndView delete(@PathVariable("id") Long id, 
+			Authentication auth,
+			RedirectAttributes att) {
+		Evento evento = eventoDAO.findById(id).get();
+		User usuarioLogado = userDAO.findByEmail(auth.getName());
+		if (usuarioLogado.getId() != evento.getDono().getId()) {
+			att.addAttribute("message", "você não pode deletar este evento");
+			return new ModelAndView("redirect:/eventos");
+		}
+		if (evento != null) {
 			att.addFlashAttribute("deletado", "Evento deletado com sucesso!");
 			eventoDAO.deleteById(id);
 		}
@@ -108,10 +125,18 @@ public class EventoController {
 	}
 	
 	@RequestMapping("/edit/{id}")
-	public ModelAndView edit(@PathVariable("id") Long id) {
+	public ModelAndView edit(@PathVariable("id") Long id,
+			RedirectAttributes att,
+			Authentication auth) {
 		ModelAndView modelForm = new ModelAndView("evento/form-update");
+		Evento evento = eventoDAO.findById(id).get();
+		User usuarioLogado = userDAO.findByEmail(auth.getName());
+		if (usuarioLogado.getId() != evento.getDono().getId()) {
+			att.addAttribute("message", "você não pode alterar este evento");
+			return new ModelAndView("redirect:/eventos");
+		}
 		modelForm.addObject("especialidades", especDAO.findAll());
-		modelForm.addObject("evento", eventoDAO.findById(id).get());
+		modelForm.addObject("evento", evento);
 		return modelForm;
 	}
 	

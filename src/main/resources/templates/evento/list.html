@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head th:insert="fragments/head.html :: head">
 </head>
 <body>
@@ -11,14 +12,16 @@
 		<div th:if="${deletado}" ></div>
 		<br>
 		<h2>Eventos cadastrados</h2>
-		<a th:href="@{/eventos/form}" class="btn btn-primary">Novo</a>
+		<a sec:authorize="isAuthenticated()"
+           th:href="@{/eventos/form}" class="btn btn-primary">Novo</a>
 		<div style="height: 20px"></div>
 		<table class="table table-stripped">
 			<tr>
 				<th>Descrição</th>
 				<th>Local</th>
 				<th>Data</th>
-				<th>Vaga</th>
+				<th>Vagas</th>
+				<th>Organizador</th>
 				<th>Action<th>
 			</tr>
 			<tr th:each="evento: ${eventos}">
@@ -26,10 +29,14 @@
 				<td th:text="${evento.local}"></td>
 				<td th:text="${evento.data}"></td>
 				<td th:text="${evento.vagas}"></td>
+				<td th:text="${evento.dono.nome}"></td>
 				<td> 
-					<div class="btn-group pull-right">
+					<div class="btn-group pull-right" th:if="${evento.dono.id == userLog.id}">
 						<a class="btn btn-sm btn-primary" th:href="@{/eventos/edit/{id}(id=${evento.id})}" >Editar</a>
 						<a class="delete btn btn-sm btn-danger" th:href="@{/eventos/delete/{id}(id=${evento.id})}">Excluir</a>
+					</div>
+					<div class="btn-group pull-right" th:if="${evento.dono.id != userLog.id}">
+						<a class="delete btn btn-sm btn-danger" th:href="@{/eventos/{id}(id=${evento.id})}">Detalhes</a>
 					</div>
 				</td>
 			</tr>
