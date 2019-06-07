@@ -42,7 +42,7 @@ public class FakerController {
 	
 	public void createDataEspecialidade () {
 		Especialidade especialidade;
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 5; i++) {
 			especialidade = new Especialidade();
 			especialidade.setNome(faker.company().profession());
 			especialidade.setDescricao(faker.lorem().characters(100));
@@ -59,7 +59,7 @@ public class FakerController {
 		user.setAdmin(true);
 		user.setSenha(passwordEncoder.encode("admin"));
 		userdao.save(user);
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 5; i++) {
 			user = new User();
 			user.setNome(faker.name().firstName());
 			user.setEmail(user.getNome().toLowerCase()+"@test");
@@ -71,7 +71,7 @@ public class FakerController {
 	
 	public void createDataEvents () {
 		Evento evento;
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 5; i++) {
 			evento = new Evento();
 			evento.setDescricao(faker.lorem().sentence());
 			evento.setData(faker.date().future(10, TimeUnit.DAYS));

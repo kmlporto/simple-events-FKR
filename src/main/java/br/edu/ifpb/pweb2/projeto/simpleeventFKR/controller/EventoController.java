@@ -6,6 +6,9 @@ import java.util.Optional;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +24,7 @@ import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.UserDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.VagaDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Especialidade;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Evento;
+import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.User;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Vaga;
 
 @Controller
@@ -39,6 +43,10 @@ public class EventoController {
 	@Autowired
 	public VagaDAO vagaDAO;
 	
+
+	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+
 	/**ROUTES
 	 * form (@RequestMapping("/form"))
 	 * save (@RequestMapping(method=RequestMethod.POST))
@@ -48,13 +56,14 @@ public class EventoController {
 	 * 
 	 * **/ 
 	@RequestMapping("/form")
-	public ModelAndView form(Evento evento) {
+	public ModelAndView form(Evento evento, Authentication auth) {
 		ModelAndView modelForm = new ModelAndView("evento/form");
 		return modelForm.addObject("especialidades", especDAO.findAll()); 
 	}	
 	
 	@RequestMapping(method=RequestMethod.POST, value="/save")
 	public ModelAndView save(@Valid Evento evento, 
+			Authentication auth,
 			BindingResult result,
 			@RequestParam("especialidades") List<Long> especialidades,
 			@RequestParam("quantidades") List<Integer> quantidades
@@ -75,21 +84,40 @@ public class EventoController {
             evento.add(vaga);
             i++;
         }
+        User currentUser = userDAO.findByEmail(auth.getName());
+        evento.setDono(currentUser);
         eventoDAO.save(evento);
         return new ModelAndView("redirect:/eventos");
 	}
 	
 	@RequestMapping(method=RequestMethod.GET)
-	public ModelAndView list() {
+	public ModelAndView list(Authentication auth) {
 		ModelAndView modelList = new ModelAndView("evento/list");
+		User usuarioLogado = userDAO.findByEmail(auth.getName());
+		modelList.addObject("userLog", usuarioLogado);
 		modelList.addObject("eventos", eventoDAO.findAll());
 		return modelList;
 	}
 	
+	@RequestMapping(method=RequestMethod.GET, value="/{id}")
+	public ModelAndView detail(@PathVariable("id") Long id) {
+		Evento evento = eventoDAO.findById(id).get();
+		ModelAndView modelDetail = new ModelAndView("evento/detail");
+		modelDetail.addObject("evento", evento);
+		return modelDetail;
+	}
+
 	@RequestMapping("/delete/{id}")
-	public ModelAndView delete(@PathVariable("id") Long id, RedirectAttributes att) {
-		Optional<Evento> optionalEvento = eventoDAO.findById(id);
-		if (optionalEvento != null) {
+	public ModelAndView delete(@PathVariable("id") Long id,
+			Authentication auth,
+			RedirectAttributes att) {
+		Evento evento = eventoDAO.findById(id).get();
+		User usuarioLogado = userDAO.findByEmail(auth.getName());
+		if (usuarioLogado.getId() != evento.getDono().getId()) {
+			att.addAttribute("message", "você não pode deletar este evento");
+			return new ModelAndView("redirect:/eventos");
+		}
+		if (evento != null) {
 			att.addFlashAttribute("deletado", "Evento deletado com sucesso!");
 			eventoDAO.deleteById(id);
 		}
@@ -97,15 +125,25 @@ public class EventoController {
 	}
 	
 	@RequestMapping("/edit/{id}")
-	public ModelAndView edit(@PathVariable("id") Long id) {
+	public ModelAndView edit(@PathVariable("id") Long id,
+			RedirectAttributes att,
+			Authentication auth) {
 		ModelAndView modelForm = new ModelAndView("evento/form");
+		Evento evento = eventoDAO.findById(id).get();
+		User usuarioLogado = userDAO.findByEmail(auth.getName());
+		if (usuarioLogado.getId() != evento.getDono().getId()) {
+			att.addAttribute("message", "você não pode alterar este evento");
+			return new ModelAndView("redirect:/eventos");
+		}
 		modelForm.addObject("especialidades", especDAO.findAll());
-		modelForm.addObject("evento", eventoDAO.findById(id).get());
+		modelForm.addObject("evento", evento);
 		return modelForm;
 	}
 	
 	@RequestMapping(value="/update/{id}", method=RequestMethod.POST)
-	public ModelAndView update(@PathVariable("id") Long id, 
+	public ModelAndView update(
+			Authentication auth,
+			@PathVariable("id") Long id,
 			@Valid Evento evento, 
 			RedirectAttributes att,
 			BindingResult result) {
@@ -113,6 +151,7 @@ public class EventoController {
 	    	evento.setId(id);
 	        return new ModelAndView("evento/form");
 	    }
+	    evento.setDono(userDAO.findByEmail(auth.getName()));
 	    eventoDAO.save(evento);
 	    return new ModelAndView("redirect:/eventos");
 	}
