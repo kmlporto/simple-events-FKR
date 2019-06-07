@@ -24,6 +24,20 @@ public class CandidatoVaga {
 
 	public CandidatoVaga() {
 	};
+	
+	
+
+	public Long getId() {
+		return id;
+	}
+
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
 
 	public Vaga getVaga() {
 		return vaga;

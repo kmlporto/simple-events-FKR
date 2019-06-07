@@ -1,5 +1,7 @@
 package br.edu.ifpb.pweb2.projeto.simpleeventFKR.controller;
 
+import java.util.List;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,9 +15,11 @@ import com.github.javafaker.Faker;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.EspecialidadeDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.EventoDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.UserDAO;
+import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.VagaDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Especialidade;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Evento;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.User;
+import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Vaga;
 
 @Controller
 @RequestMapping("/datafaker")
@@ -30,6 +34,9 @@ public class FakerController {
 	private UserDAO userdao;
 	@Autowired 
 	public EventoDAO eventoDAO;
+	@Autowired 
+	public VagaDAO vagaDAO;
+	
 	
 	
 	@RequestMapping
@@ -37,6 +44,7 @@ public class FakerController {
 		createDataEspecialidade();
 		createDataUser();
 		createDataEvents();
+		createDataVagas();
 		return "datafaker";
 	}
 	
@@ -70,14 +78,32 @@ public class FakerController {
 	}
 	
 	public void createDataEvents () {
+		List<User> usuarios = userdao.findAll();
 		Evento evento;
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 10; i++) {
+			Random rand = new Random();
 			evento = new Evento();
 			evento.setDescricao(faker.lorem().sentence());
 			evento.setData(faker.date().future(10, TimeUnit.DAYS));
 			evento.setLocal(faker.address().fullAddress());
+			evento.setDono(usuarios.get(rand.nextInt(usuarios.size())));
 			
 			eventoDAO.save(evento);
+		}
+		
+	}
+	
+	public void createDataVagas () {
+		List<Especialidade> especialidades = especialidadedao.findAll();
+		List<Evento> eventos = eventoDAO.findAll();
+		Vaga vaga;
+		for (int i = 0; i < 50; i++) {
+			Random rand = new Random();
+			vaga = new Vaga();
+			vaga.setEvento(eventos.get(rand.nextInt(eventos.size())));
+			vaga.setQtdVagas(rand.nextInt(10));
+			vaga.setEspecialidade(especialidades.get(rand.nextInt(especialidades.size())));
+			vagaDAO.save(vaga);
 		}
 		
 	}
