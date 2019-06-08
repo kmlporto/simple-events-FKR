@@ -2,7 +2,8 @@ package br.edu.ifpb.pweb2.projeto.simpleeventFKR.controller;
 
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
+import java.time.LocalDateTime;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -38,12 +39,12 @@ public class FakerController {
 	private UserDAO userdao;
 	@Autowired 
 	public EventoDAO eventoDAO;
-	@Autowired 
+	@Autowired
 	public VagaDAO vagaDAO;
-	@Autowired 
+	@Autowired
 	public CandidatoVagaDAO candidaturaDAO;
-	
-	
+
+
 	
 	@RequestMapping
 	public String createDataFaker() {
@@ -91,7 +92,7 @@ public class FakerController {
 			Random rand = new Random();
 			evento = new Evento();
 			evento.setDescricao(faker.lorem().sentence());
-			evento.setData(faker.date().future(10, TimeUnit.DAYS));
+			evento.setData(LocalDateTime.now().plusDays(10));
 			evento.setLocal(faker.address().fullAddress());
 			evento.setDono(usuarios.get(rand.nextInt(usuarios.size())));
 			evento.setStatus(StatusEvento.ABERTO);
@@ -99,7 +100,7 @@ public class FakerController {
 		}
 		
 	}
-	
+
 	public void createDataVagas () {
 		List<Especialidade> especialidades = especialidadedao.findAll();
 		List<Evento> eventos = eventoDAO.findAll();
@@ -110,7 +111,7 @@ public class FakerController {
 			vaga.setEvento(eventos.get(rand.nextInt(eventos.size())));
 			vaga.setQtdVagas(rand.nextInt(10)+1);
 //			List<Vaga> vagasExistentes = eventoDAO.findById(vaga.getEvento().getId()).get().getVagas();
-			
+
 //			Boolean testeEspecialidade = false;
 			Especialidade novaEspecialidade;
 			novaEspecialidade = especialidades.get(rand.nextInt(especialidades.size()));
@@ -131,7 +132,7 @@ public class FakerController {
 			vagaDAO.save(vaga);
 		}
 	}
-	
+
 	public void createDataCandidatoVaga () {
 		List<Vaga> vagas = vagaDAO.findAll();
 		List<User> usuarios = userdao.findAll();
@@ -142,9 +143,9 @@ public class FakerController {
 			candidatura.setVaga(vagas.get(rand.nextInt(vagas.size())));
 			candidatura.setStatus(Status.NAO_AVALIADO);
 			List<CandidatoVaga> candidaturasExistentes = vagaDAO.findById(candidatura.getVaga().getId()).get().getCandidatoVaga();
-			
+
 			Boolean testeCandidato = false;
-			User novoCandidato; 
+			User novoCandidato;
 			do {
 				novoCandidato = usuarios.get(rand.nextInt(usuarios.size()));
 				testeCandidato = false;

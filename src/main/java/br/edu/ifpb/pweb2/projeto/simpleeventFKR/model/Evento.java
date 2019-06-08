@@ -1,5 +1,6 @@
 package br.edu.ifpb.pweb2.projeto.simpleeventFKR.model;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,10 +31,11 @@ public class Evento {
 	@NotEmpty(message = "Campo obrigatorio")
 	private String descricao;
 
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
 	@NotNull(message = "Campo obrigatorio")
 	@Future(message = "A data deve estar no futuro")
-	private Date data;
+	private LocalDateTime data;
+
 	private StatusEvento status;
 	private String local;
 	
@@ -51,7 +53,7 @@ public class Evento {
 	public Evento() {
 	}
 	
-	public Evento(String d, Date dh, String l) {
+	public Evento(String d, LocalDateTime dh, String l) {
 		super();
 		this.descricao = d;
 		this.data = dh;
@@ -106,11 +108,11 @@ public class Evento {
 		this.descricao = descricao;
 	}
 
-	public Date getData() {
+	public LocalDateTime getData() {
 		return data;
 	}
 
-	public void setData(Date datahora) {
+	public void setData(LocalDateTime datahora) {
 		this.data = datahora;
 	}
 
@@ -142,6 +144,35 @@ public class Evento {
 	public String toString() {
 		return "Evento [id=" + id + ", descricao=" + descricao + ", data=" + data + ", local=" + local + ", owner="
 				+ dono + ", vagas=" + vagas + ", avaliacao eventos=" + avaliacaoEventos + "]";
+	}
+
+	public Vaga findVagaByEspecialidade (Long idEspecialidade) {
+		Vaga vaga = null;
+		for(Vaga v: this.getVagas())
+			if (v.getEspecialidade().getId() == idEspecialidade)
+				vaga = v;
+		return vaga;
+	}
+
+	public ArrayList<Vaga> descartarVagas (List<Long> especialidades) {
+		System.out.println(especialidades);
+		ArrayList<Vaga> vagas = new ArrayList<>(this.getVagas());
+		for (Long i: especialidades)
+			for (int j = 0; j < vagas.size(); j++) {
+				if (vagas.get(j).getEspecialidade().getId() == i) {
+					vagas.remove(vagas.get(j));
+					j--;
+				}
+			}
+		System.out.println(vagas);
+		this.getVagas().removeAll(vagas);
+		return vagas;
+	}
+
+	public void atualizarEvento (Evento eventoAntigo) {
+		this.setVagas(new ArrayList<>(eventoAntigo.getVagas()));
+		this.setAvaliacaoEventos(new ArrayList<>(eventoAntigo.getAvaliacaoEventos()));
+		this.setDono(eventoAntigo.getDono());
 	}
 
 }

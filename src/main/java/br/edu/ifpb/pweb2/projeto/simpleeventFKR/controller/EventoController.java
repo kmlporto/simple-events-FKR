@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -56,43 +57,45 @@ public class EventoController {
 
 	@Autowired
 	public CandidatoVagaDAO candidatoVagaDAO;
-	
+
 	/**ROUTES
 	 * form (@RequestMapping("/form"))
 	 * save (@RequestMapping(method=RequestMethod.POST))
 	 * list (@RequestMapping(method=RequestMethod.GET))
 	 * delete (@RequestMapping("/delete/{id}"))
 	 * edit (@RequestMapping("/edit/{id}"))
-	 * 
-	 * **/ 
+	 *
+	 * **/
 	@RequestMapping("/form")
 	public ModelAndView form(Evento evento, Authentication auth) {
 		ModelAndView modelForm = new ModelAndView("evento/form");
-		return modelForm.addObject("especialidades", especDAO.findAll()); 
-	}	
-	
+		return modelForm.addObject("especialidades", especDAO.findAll());
+	}
+
 	@RequestMapping(method=RequestMethod.POST, value="/save")
-	public ModelAndView save(@Valid Evento evento, 
+	public ModelAndView save(@Valid Evento evento,
 			Authentication auth,
 			BindingResult result,
-			@RequestParam("especialidades") List<Long> especialidades,
-			@RequestParam("quantidades") List<Integer> quantidades
+							 @RequestParam(value = "especialidades", required = false) List<Long> especialidades,
+							 @RequestParam(value = "quantidades", required = false) List<Integer> quantidades
 			) {
 		if (result.hasErrors()) {
             return new ModelAndView("/form");
         }
-		eventoDAO.save(evento);
-		Optional<Especialidade> esp;
-        int i = 0;
-        for (Long id : especialidades) {
-            esp = especDAO.findById(id);
-            Vaga vaga = new Vaga();
-            vaga.setEspecialidade(esp.get());
-            vaga.setQtdVagas(quantidades.get(i));
-            vaga.setEvento(evento);
-            vagaDAO.save(vaga);
-            evento.add(vaga);
-            i++;
+        if (especialidades != null) {
+            eventoDAO.save(evento);
+            Optional<Especialidade> esp;
+            int i = 0;
+            for (Long id : especialidades) {
+                esp = especDAO.findById(id);
+                Vaga vaga = new Vaga();
+                vaga.setEspecialidade(esp.get());
+                vaga.setQtdVagas(quantidades.get(i));
+                vaga.setEvento(evento);
+                vagaDAO.save(vaga);
+                evento.add(vaga);
+                i++;
+            }
         }
         User currentUser = userDAO.findByEmail(auth.getName());
         evento.setDono(currentUser);
@@ -108,7 +111,7 @@ public class EventoController {
 		modelList.addObject("eventos", eventoDAO.findAll());
 		return modelList;
 	}
-	
+
 	@GetMapping("/meuseventos")
 	public ModelAndView listmyevents(Authentication auth) {
 		ModelAndView modelList = new ModelAndView("evento/list");
@@ -117,7 +120,7 @@ public class EventoController {
 		modelList.addObject("eventos", eventoDAO.findByDono(usuarioLogado));
 		return modelList;
 	}
-	
+
 	@RequestMapping(method=RequestMethod.GET, value="/{id}")
 	public ModelAndView detail(@PathVariable("id") Long id,
 			Authentication auth) {
@@ -145,7 +148,7 @@ public class EventoController {
 		}
 		return new ModelAndView("redirect:/eventos");
 	}
-	
+
 	@RequestMapping("/edit/{id}")
 	public ModelAndView edit(@PathVariable("id") Long id,
 			RedirectAttributes att,
@@ -161,23 +164,46 @@ public class EventoController {
 		modelForm.addObject("evento", evento);
 		return modelForm;
 	}
-	
+
 	@RequestMapping(value="/update/{id}", method=RequestMethod.POST)
 	public ModelAndView update(
 			Authentication auth,
 			@PathVariable("id") Long id,
-			@Valid Evento evento, 
 			RedirectAttributes att,
-			BindingResult result) {
-	    if (result.hasErrors()) {
-	    	evento.setId(id);
-	        return new ModelAndView("evento/form");
-	    }
+			@Valid Evento evento,
+			BindingResult result,
+			@RequestParam(value = "especialidades", required = false) List<Long> especialidades,
+			@RequestParam(value = "quantidades", required = false) List<Integer> quantidades) {
+		if (result.hasErrors()) {
+			evento.setId(id);
+			ModelAndView modelForm = new ModelAndView("evento/form");
+			return modelForm.addObject("especialidades", especDAO.findAll());
+		}
+
+		Evento eventoAntigo = eventoDAO.findById(id).get();
+		evento.setVagas(new ArrayList<>(eventoAntigo.getVagas()));
+		evento.setAvaliacaoEventos(new ArrayList<>(eventoAntigo.getAvaliacaoEventos()));
+		evento.setDono(eventoAntigo.getDono());
+		if (especialidades != null) {
+			for (Vaga v: evento.descartarVagas(especialidades))
+				vagaDAO.deleteById(v.getId());
+
+			for(int i=0; i < especialidades.size(); i++) {
+				Vaga v = evento.findVagaByEspecialidade(especialidades.get(i));
+				if (v != null) {
+					v.setQtdVagas(quantidades.get(i));
+				} else {
+					Vaga vaga = new Vaga(especDAO.getOne(especialidades.get(i)), quantidades.get(i), evento);
+					vagaDAO.save(vaga);
+					evento.add(vaga);
+				}
+			}
+		}
 	    evento.setDono(userDAO.findByEmail(auth.getName()));
 	    eventoDAO.save(evento);
 	    return new ModelAndView("redirect:/eventos");
 	}
-	
+
 	@GetMapping("/candidatar/{id}")
 	public ModelAndView exibirCandidatar (@PathVariable("id") Long id) {
 		Evento evento = eventoDAO.findById(id).get();
@@ -190,7 +216,7 @@ public class EventoController {
 		modelForm.addObject("especialidades", especialidadesdisponiveis);
 		return modelForm;
 	}
-		
+
 	@PostMapping("/candidatar/{id}")
 	public ModelAndView candidatar (@PathVariable("id") Long id,
 			@RequestParam("especialidades") List<Long> especialidades,
@@ -199,10 +225,10 @@ public class EventoController {
 		Evento evento = eventoDAO.getOne(id);
 		CandidatoVaga candidatoVaga;
 		Boolean vagaValida=false;
-		
+
 		for (Long especialidade : especialidades) {
 			vagaValida=false;
-			for (Vaga vaga : this.getVagasDisponiveis(evento)) {	
+			for (Vaga vaga : this.getVagasDisponiveis(evento)) {
 				if(vaga.getEspecialidade().getId() == especialidade) {
 					candidatoVaga = new CandidatoVaga();
 					candidatoVaga.setVaga(vaga);
@@ -216,17 +242,17 @@ public class EventoController {
 				att.addFlashAttribute("mensagemerro",String.format("Não foi possivel se candidatar a vaga %s: VAGA JÁ ESGOTADA!",
 						especDAO.findById(especialidade).get().getNome()));
 			}
-			
+
 		}
 		att.addFlashAttribute("mensagem", "Se tornou candidato com sucesso!");
-		
+
 		return new ModelAndView("redirect:/");
 	}
-	
+
 	private List<Vaga> getVagasDisponiveis (Evento evento) {
 		List<Vaga> vagas = evento.getVagas();
 		List<Vaga> vagasdisponiveis = new ArrayList<Vaga>();
-		
+
 		for (Vaga vaga : vagas) {
 			int qntAprovadoPendente = 0;
 			for (CandidatoVaga candidatoVaga : vaga.getCandidatoVaga()) {
@@ -240,7 +266,7 @@ public class EventoController {
 		}
 		return vagasdisponiveis;
 	}
-	
+
 	@GetMapping("/{id}/candidatos")
 	public ModelAndView analisarCandidatos(@PathVariable("id") Long id) {
 		ModelAndView modelForm = new ModelAndView("evento/analisecandidatos");

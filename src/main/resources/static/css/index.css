@@ -1,27 +1,60 @@
 body {
-	background: #ECE9E6;
-	/* fallback for old browsers */
-	background: -webkit-linear-gradient(to bottom, #FFFFFF, #ECE9E6);
-	/* Chrome 10-25, Safari 5.1-6 */
-	background: linear-gradient(to bottom, #FFFFFF, #ECE9E6);
-	/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+	/*background: #ECE9E6;*/
+	/*!* fallback for old browsers *!*/
+	/*background: -webkit-linear-gradient(to bottom, #FFFFFF, #ECE9E6);*/
+	/*!* Chrome 10-25, Safari 5.1-6 *!*/
+	/*background: linear-gradient(to bottom, #FFFFFF, #ECE9E6);*/
+	/*!* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ *!*/
+	background-color: #ebe5e0;
 	background-repeat: no-repeat;
 	width: 100%;
-	height: 100vh;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	color: #565656;
+}
+
+nav.navbar.navbar-expand-md.navbar-light.mb-4 {
+	background: white;
+}
+
+nav.navbar-light .navbar-nav .nav-link {
+	color: #565656;
 }
 
 .teste {
-	color: #9a9a9a;
-	border-color: #9a9a9a;
+	color: #565656;
+	border-color: #565656;
 }
 
 .teste:hover {
 	color: #fff;
-	background-color: #9a9a9a;
-	border-color: #9a9a9a;
+	background-color: #565656;
+	border-color: #565656;
 }
 
 .items-navbar {
 	align-items: center;
-	justify-content: space-between;
+	justify-content: flex-end;
+}
+
+a.excluir-vaga {
+	font-size: 10px;
+	color: blue;
+	text-decoration: underline;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+
+.vaga {
+	background: #DCDCDC;
+	border-radius: 5px;
+	min-height: 100px;
+	min-width: 100px;
+	margin: 20px;
+}
+
+.vagas {
+	justify-content: center;
 }

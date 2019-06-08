@@ -4,90 +4,259 @@
 </head>
 <body>
 
-	<!-- Navbar -->
-    <div th:replace="fragments/navbar"></div>
+<!-- Navbar -->
+<div th:replace="fragments/navbar"></div>
 
 <div class="container">
     <br>
-    <h2>Adicionar Evento</h2>
+    <h4>Evento</h4>
     <hr>
     <!-- Form de Create -->
     <form th:if="${evento.id == null}" th:action="@{/eventos/save}" th:object="${evento}" method="POST">
-        <div class="form-row">
-            <div class="form-group col-md-4">
-                <label for="descricao">Descrição</label>
-                <input type="text" class="form-control" th:id="descricao" name="descricao"
-                       placeholder="Descrição do evento aqui">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="descricao">Descrição</label>
+                    <input type="text" class="form-control" id="descricao" name="descricao"
+                           th:value="${evento.descricao}" placeholder="Descrição do evento aqui">
+                </div>
+
+                <div class="form-group ">
+                    <label for="local">Local</label>
+                    <input type="text" class="form-control" id="local" name="local">
+                    <p th:if="${#fields.hasErrors('local')}" th:errors="*{local}"></p>
+                </div>
+
+                <div class="form-group col-md-6 p-0">
+                    <label for="data">Data</label>
+                    <input type="datetime-local" class="form-control" id="data" name="data">
+                    <p class="danger" th:if="${#fields.hasErrors('data')}" th:errors="*{data}"></p>
+                </div>
+                <div class="row m-auto">
+                    <hr>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
             </div>
 
-            <div class="form-group col-md-4">
-                <label for="local">Local</label>
-                <input type="text" class="form-control" th:id="local" name="local" th:field="*{local}">
-                <p th:if="${#fields.hasErrors('local')}" th:errors="*{local}"></p>
-            </div>
-
-            <div class="form-group col-md-4">
-                <label for="data">Data</label>
-                <input type="date" class="form-control" id="data" name="data">
-                <p class="danger" th:if="${#fields.hasErrors('data')}" th:errors="*{data}"></p>
-            </div>
-            <div class="form-group col-md-4">
-                <p>Vagas</p>
-                <div class="form-row align-items-center">
-                    <div th:each="espec : ${especialidades}">
-                        <div class="col-auto my-1">
-                            <label>
-                                <input type="checkbox" class="especialidades"
-                                       name="especialidades" th:value="${espec.id}">
-                                <span th:text="${espec.nome}"></span>
-                            </label>
-                            <input disabled type="number" name="quantidades"
-                                   class="form-control quantidades">
+            <div class="col-md-6">
+                <div style="display: flex; justify-content: space-between; align-items: center" class="row col-md-12 m-0">
+                    <h4 class="m-0">Vagas</h4>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAdd"
+                            id="botaoAdd">
+                        Adicionar Vaga
+                    </button>
+                </div>
+                <hr>
+                <div class="form-group col-md-12 vagas row m-0">
+                    <div th:if="${evento.vagas != null && evento.vagas.size() > 0}" class="vaga col-md-4"
+                         th:each="vaga : ${evento.vagas}">
+                        <div class="form-check">
+                            <input class="form-check-input especialidade" name="especialidades"
+                                   type="checkbox" th:value="${vaga.especialidade.id}" checked>
+                            <label class="form-check-label" th:text="${vaga.especialidade.nome}"></label>
                         </div>
+                        <input type="number" name="quantidades"
+                               class="form-control quantidade" th:value="${vaga.qtdVagas}">
+                        <a class="excluir-vaga">Excluir Vaga</a>
                     </div>
+                    <p th:unless="${evento.vagas != null && evento.vagas.size() > 0}">Não temos vagas!</p>
                 </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+    <!-- Form de Create -->
+<!--    <form th:if="${evento.id == null}" th:action="@{/eventos/save}" th:object="${evento}" method="POST">-->
+<!--        <div class="form-row">-->
+<!--            <div class="form-group col-md-4">-->
+<!--                <label>Descrição</label>-->
+<!--                <input type="text" class="form-control" th:id="descricao" name="descricao"-->
+<!--                       placeholder="Descrição do evento aqui">-->
+<!--            </div>-->
+
+<!--            <div class="form-group col-md-4">-->
+<!--                <label>Local</label>-->
+<!--                <input type="text" class="form-control" th:id="local" name="local" th:field="*{local}">-->
+<!--                <p th:if="${#fields.hasErrors('local')}" th:errors="*{local}"></p>-->
+<!--            </div>-->
+
+<!--            <div class="form-group col-md-4">-->
+<!--                <label for="data">Data</label>-->
+<!--                <input type="date" class="form-control" id="data" name="data">-->
+<!--                <p class="danger" th:if="${#fields.hasErrors('data')}" th:errors="*{data}"></p>-->
+<!--            </div>-->
+
+<!--            <div style="display: flex; justify-content: space-between;" class="row col-md-12">-->
+<!--                <h4>Vagas</h4>-->
+<!--                &lt;!&ndash; Button trigger modal &ndash;&gt;-->
+<!--                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAdd" id="botaoAdd">-->
+<!--                    Adicionar Vaga-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <hr>-->
+<!--            <div class="form-group col-md-4 vagas">-->
+<!--                <div th:unlees="${evento.vagas != null || evento.vagas.size() > 0}">-->
+<!--                    Sem vagas disponíveis!-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--        <button type="submit" class="btn btn-primary">Submit</button>-->
+<!--    </form>-->
 
     <!-- Form de Update -->
     <form th:unless="${evento.id == null}" th:action="@{/eventos/update/{id}(id=${evento.id})}" th:object="${evento}"
           method="POST">
-        <div class="form-row">
-            <div class="form-group col-md-4">
-                <label for="descricao">Descrição</label>
-                <input type="text" class="form-control" id="descricao" name="descricao"
-                       th:value="${evento.descricao}" placeholder="Descrição do evento aqui">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="descricao">Descrição</label>
+                    <input type="text" class="form-control" id="descricao" name="descricao"
+                           th:value="${evento.descricao}" placeholder="Descrição do evento aqui">
+                </div>
+
+                <div class="form-group ">
+                    <label for="local">Local</label>
+                    <input type="text" class="form-control" id="local" name="local" th:field="*{local}">
+                    <p th:if="${#fields.hasErrors('local')}" th:errors="*{local}"></p>
+                </div>
+
+                <div class="form-group col-md-6 p-0">
+                    <label for="data">Data</label>
+                    <input type="datetime-local" class="form-control" id="data" name="data" th:field="*{data}">
+                    <p class="danger" th:if="${#fields.hasErrors('data')}" th:errors="*{data}"></p>
+                </div>
+                <div class="row m-auto">
+                    <hr>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
             </div>
 
-            <div class="form-group col-md-4">
-                <label for="local">Local</label>
-                <input type="text" class="form-control" id="local" name="local" th:field="*{local}">
-                <p th:if="${#fields.hasErrors('local')}" th:errors="*{local}"></p>
-            </div>
-
-            <div class="form-group col-md-4">
-                <label for="data">Data</label>
-                <input type="date" class="form-control" id="data" name="data">
-                <p class="danger" th:if="${#fields.hasErrors('data')}" th:errors="*{data}"></p>
+            <div class="col-md-6">
+                <div style="display: flex; justify-content: space-between; align-items: center" class="row col-md-12 m-0">
+                    <h4 class="m-0">Vagas</h4>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalAdd"
+                            id="botaoAdd">
+                        Adicionar Vaga
+                    </button>
+                </div>
+                <hr>
+                <div class="form-group col-md-12 vagas row m-0">
+                    <div th:if="${evento.vagas != null && evento.vagas.size() > 0}" class="vaga col-md-4"
+                         th:each="vaga : ${evento.vagas}">
+                        <div class="form-check">
+                            <input class="form-check-input especialidade" name="especialidades"
+                                   type="checkbox" th:value="${vaga.especialidade.id}" checked>
+                            <label class="form-check-label" th:text="${vaga.especialidade.nome}"></label>
+                        </div>
+                        <input type="number" name="quantidades"
+                               class="form-control quantidade" th:value="${vaga.qtdVagas}">
+                        <a class="excluir-vaga">Excluir Vaga</a>
+                    </div>
+                    <p th:unless="${evento.vagas != null && evento.vagas.size() > 0}">Não temos vagas!</p>
+                </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
 
+<div class="modal fade" id="modalAdd" tabindex="-1" role="dialog" aria-labelledby="ModalLabelAdd" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addModalLabel">New message</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <select class="custom-select">
+                    <option>Open this select menu</option>
+                    <option th:each="especialidade: ${especialidades}"
+                            th:value="${especialidade.id}" th:text="${especialidade.nome}"></option>
+                </select>
+                <div class="form-group">
+                    <label for="qtdVagasModal">Quantidade</label>
+                    <input type="number" class="form-control" id="qtdVagasModal">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary addConfirm">Adicionar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
-    let especialidades = document.querySelectorAll('.especialidades');
-    let quantidadevagas = document.querySelectorAll('.quantidades');
-    especialidades.forEach( (especialidade, indice) => {
-        especialidade.addEventListener('change', () => {
-            quantidadevagas[indice].disabled = !quantidadevagas[indice].disabled
+
+    const addEventRemove = () => {
+        let excluirVagas = document.querySelectorAll('.excluir-vaga');
+        let listVagas = document.querySelectorAll('.vaga');
+        excluirVagas.forEach(function (elementoExcluir, indice) {
+            elementoExcluir.addEventListener('click', function (evt) {
+                    // console.log("entrou")
+                    listVagas[indice].remove()
+                    // console.log(listVagas[indice])
+                }
+            )
         })
+
+    }
+
+    const addEventChange = () => {
+
+        let listVagas = document.querySelectorAll('.vaga');
+        let especialidades = document.querySelectorAll('.especialidade');
+        let quantidadevagas = document.querySelectorAll('.quantidade');
+        listVagas.forEach(function (vaga, indice) {
+            especialidades[indice].addEventListener('change', function () {
+                    quantidadevagas[indice].disabled = !quantidadevagas[indice].disabled
+                }
+            )
+        })
+    }
+
+
+    let vagas = document.querySelector('.vagas')
+    let especialidades = document.querySelectorAll('.especialidade')
+    let quantidadevagas = document.querySelectorAll('.quantidade');
+    let listVagas = document.querySelectorAll('.vaga');
+
+
+    $('.addConfirm').click(function (event) {
+        var modal = $('#modalAdd')
+        let idEspecialidade = modal.find('.custom-select  option:selected').val()
+        let nomeEspecialidade = modal.find('.custom-select  option:selected').text()
+        let qtdVagas = modal.find('#qtdVagasModal').val()
+        let vagas = document.querySelector('.vagas')
+        console.log(vagas.children[0].innerHTML)
+        if (vagas.children[0].innerHTML.includes('Não temos vagas!'))
+            vagas.innerHTML = ''
+        vagas.insertAdjacentHTML('beforeend',
+            `
+             <div class="vaga col-md-4">
+                <div class="form-check">
+                    <input class="form-check-input especialidade" name="especialidades" type="checkbox" value="${idEspecialidade}" checked>
+                    <label class="form-check-label">${nomeEspecialidade}</label>
+                </div>
+                <input type="number" name="quantidades"
+                       class="form-control quantidade" value="${qtdVagas}">
+                <a class="excluir-vaga card-link">Excluir Vaga</a>
+             </div>
+        `)
+        modal.find('.custom-select  option:selected').remove()
+        modal.find('.custom-select  option').prop('selected', '')
+        modal.find('#qtdVagasModal').val('')
+        modal.modal('hide')
+        addEventRemove()
+        addEventChange()
     })
+    addEventRemove()
+    addEventChange()
 </script>
 
-<footer th:insert="fragments/footer :: footer"></footer>
+<footer th:replace="fragments/footer :: footer"></footer>
 
 
 </body>

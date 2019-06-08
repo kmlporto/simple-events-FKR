@@ -33,6 +33,11 @@ public class Vaga {
 	private Especialidade especialidade;
 	
 	public Vaga() {};
+	public Vaga(Especialidade especialidade, int qtdVagas, Evento evento) {
+		this.especialidade = especialidade;
+		this.qtdVagas = qtdVagas;
+		this.evento = evento;
+	};
 	
 	public Long getId() {
 		return id;
@@ -85,6 +90,6 @@ public class Vaga {
 	@Override
 	public String toString() {
 		return "Vaga [id=" + id + ", evento=" + evento.getDescricao() + ", qtd vagas=" + qtdVagas+
-				", especialidade=" + especialidade.getNome() + "]";
+				", especialidade=" + especialidade.getId() + " - " + especialidade.getNome() + "]";
 	}
 }
