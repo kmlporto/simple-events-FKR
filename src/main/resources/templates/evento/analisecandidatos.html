@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:insert="fragments/head.html :: head">
+</head>
+<body>
+
+<!-- Navbar -->
+    <div th:replace="fragments/navbar"></div>
+    
+    <div th:replace="fragments/mensagens"></div>
+    
+	<div class="container">
+		<h2 th:text="${evento.descricao}"></h2>
+		<br>
+		<h4>Candidatos cadastrados</h4>
+		<div style="height: 20px"></div>
+		<table class="table table-stripped">
+			<tr>
+				<th>Nome</th>
+				<th>Telefone</th>
+				<th>Vaga</th>
+				<th>Status</th>
+				<th>Action<th>
+			</tr>
+			
+			<tr th:each="candidatura: ${candidaturas}">
+				<td th:text="${candidatura.candidato.nome}"></td>
+				<td th:text="${candidatura.candidato.telefone}"></td>
+				<td th:text="${candidatura.vaga.especialidade.nome}"></td>
+				<td th:text="${candidatura.status}"></td>
+				<td>
+					<div class="btn-group pull-right" th:if="${candidatura.status.name() == 'NAO_AVALIADO'}">
+						<a class="delete btn btn-sm btn-success" th:href="@{/candidaturas/{id}/aprovar(id=${candidatura.id})}">Aprovar</a>
+						<a class="delete btn btn-sm btn-danger" th:href="@{/candidaturas/{id}/reprovar(id=${candidatura.id})}">Recusar</a>
+					</div>
+				</td>
+			</tr>
+			
+		</table>
+	</div>
+
+<footer th:insert="fragments/footer :: footer"></footer>
+</body>
+</html>

@@ -12,12 +12,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.github.javafaker.Faker;
 
+import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.CandidatoVagaDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.EspecialidadeDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.EventoDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.UserDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.VagaDAO;
+import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.CandidatoVaga;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Especialidade;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Evento;
+import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Status;
+import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.StatusEvento;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.User;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Vaga;
 
@@ -36,6 +40,8 @@ public class FakerController {
 	public EventoDAO eventoDAO;
 	@Autowired 
 	public VagaDAO vagaDAO;
+	@Autowired 
+	public CandidatoVagaDAO candidaturaDAO;
 	
 	
 	
@@ -45,6 +51,7 @@ public class FakerController {
 		createDataUser();
 		createDataEvents();
 		createDataVagas();
+		createDataCandidatoVaga();
 		return "datafaker";
 	}
 	
@@ -87,7 +94,7 @@ public class FakerController {
 			evento.setData(faker.date().future(10, TimeUnit.DAYS));
 			evento.setLocal(faker.address().fullAddress());
 			evento.setDono(usuarios.get(rand.nextInt(usuarios.size())));
-			
+			evento.setStatus(StatusEvento.ABERTO);
 			eventoDAO.save(evento);
 		}
 		
@@ -101,11 +108,54 @@ public class FakerController {
 			Random rand = new Random();
 			vaga = new Vaga();
 			vaga.setEvento(eventos.get(rand.nextInt(eventos.size())));
-			vaga.setQtdVagas(rand.nextInt(10));
-			vaga.setEspecialidade(especialidades.get(rand.nextInt(especialidades.size())));
+			vaga.setQtdVagas(rand.nextInt(10)+1);
+//			List<Vaga> vagasExistentes = eventoDAO.findById(vaga.getEvento().getId()).get().getVagas();
+			
+//			Boolean testeEspecialidade = false;
+			Especialidade novaEspecialidade;
+			novaEspecialidade = especialidades.get(rand.nextInt(especialidades.size()));
+//			do {
+//				System.out.println(vagasExistentes);
+//				novaEspecialidade = especialidades.get(rand.nextInt(especialidades.size()));
+//				System.out.println(novaEspecialidade.getNome());
+//				testeEspecialidade = false;
+//				for (Vaga vagaExistente : vagasExistentes) {
+//					System.out.println(vagaExistente.getEspecialidade().getNome());
+//					if(vagaExistente.getEspecialidade().equals(novaEspecialidade)) {
+//						testeEspecialidade = false;
+//					}
+//				}
+//				System.out.println(testeEspecialidade);
+//			} while (testeEspecialidade);
+			vaga.setEspecialidade(novaEspecialidade);
 			vagaDAO.save(vaga);
 		}
-		
 	}
-
+	
+	public void createDataCandidatoVaga () {
+		List<Vaga> vagas = vagaDAO.findAll();
+		List<User> usuarios = userdao.findAll();
+		CandidatoVaga candidatura;
+		for (int i = 0; i < 100; i++) {
+			Random rand = new Random();
+			candidatura = new CandidatoVaga();
+			candidatura.setVaga(vagas.get(rand.nextInt(vagas.size())));
+			candidatura.setStatus(Status.NAO_AVALIADO);
+			List<CandidatoVaga> candidaturasExistentes = vagaDAO.findById(candidatura.getVaga().getId()).get().getCandidatoVaga();
+			
+			Boolean testeCandidato = false;
+			User novoCandidato; 
+			do {
+				novoCandidato = usuarios.get(rand.nextInt(usuarios.size()));
+				testeCandidato = false;
+				for (CandidatoVaga candidaturaExistente : candidaturasExistentes) {
+					if(candidaturaExistente.getCandidato().equals(novoCandidato)) {
+						testeCandidato = true;
+					}
+				}
+			} while (testeCandidato);
+			candidatura.setCandidato(novoCandidato);
+			candidaturaDAO.save(candidatura);
+		}
+	}
 }

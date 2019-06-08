@@ -34,7 +34,7 @@ public class Evento {
 	@NotNull(message = "Campo obrigatorio")
 	@Future(message = "A data deve estar no futuro")
 	private Date data;
-	
+	private StatusEvento status;
 	private String local;
 	
 	@ManyToOne
@@ -121,7 +121,22 @@ public class Evento {
 	public void setLocal(String local) {
 		this.local = local;
 	}
-	
+
+	public StatusEvento getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusEvento status) {
+		this.status = status;
+	}
+
+	public void setVagas(List<Vaga> vagas) {
+		this.vagas = vagas;
+	}
+
+	public void setAvaliacaoEventos(List<AvaliacaoEvento> avaliacaoEventos) {
+		this.avaliacaoEventos = avaliacaoEventos;
+	}
 
 	@Override
 	public String toString() {

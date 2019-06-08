@@ -36,6 +36,9 @@
 					<div class="btn-group pull-right" th:if="${evento.dono.id != userLog.id}">
 						<a class="delete btn btn-sm btn-danger" th:href="@{/eventos/{id}(id=${evento.id})}">Detalhes</a>
 					</div>
+					<div class="btn-group pull-right" th:if="${evento.status.name() == 'ABERTO'}">
+						<a class="delete btn btn-sm btn-light" th:href="@{/eventos/{id}/candidatos(id=${evento.id})}">Analisar Candidatos</a>
+					</div>
 				</td>
 			</tr>
 		</table>

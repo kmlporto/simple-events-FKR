@@ -109,6 +109,15 @@ public class EventoController {
 		return modelList;
 	}
 	
+	@GetMapping("/meuseventos")
+	public ModelAndView listmyevents(Authentication auth) {
+		ModelAndView modelList = new ModelAndView("evento/list");
+		User usuarioLogado = userDAO.findByEmail(auth.getName());
+		modelList.addObject("userLog", usuarioLogado);
+		modelList.addObject("eventos", eventoDAO.findByDono(usuarioLogado));
+		return modelList;
+	}
+	
 	@RequestMapping(method=RequestMethod.GET, value="/{id}")
 	public ModelAndView detail(@PathVariable("id") Long id,
 			Authentication auth) {
@@ -230,5 +239,20 @@ public class EventoController {
 			}
 		}
 		return vagasdisponiveis;
+	}
+	
+	@GetMapping("/{id}/candidatos")
+	public ModelAndView analisarCandidatos(@PathVariable("id") Long id) {
+		ModelAndView modelForm = new ModelAndView("evento/analisecandidatos");
+		Evento evento = eventoDAO.findById(id).get();
+		List<CandidatoVaga> candidaturas = new ArrayList<CandidatoVaga>();
+		for (Vaga vaga : evento.getVagas()) {
+			for (CandidatoVaga candidatura : vaga.getCandidatoVaga()) {
+				candidaturas.add(candidatura);
+			}
+		}
+		modelForm.addObject("evento",evento);
+		modelForm.addObject("candidaturas",candidaturas);
+		return modelForm;
 	}
 }
