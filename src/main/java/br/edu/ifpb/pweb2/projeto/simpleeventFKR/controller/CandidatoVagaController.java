@@ -7,10 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -114,6 +111,20 @@ public class CandidatoVagaController {
 		candidatoVagaDAO.save(candidatura);
 		att.addFlashAttribute("mensagemsecundaria", "Candidato reprovado com sucesso!");	
 		return new ModelAndView(String.format("redirect:/eventos/%d/candidatos",candidatura.getVaga().getEvento().getId()));
+	}
+
+	@PostMapping("/{id}/avaliar")
+	public ModelAndView detail(@PathVariable("id") Long id,
+							   @RequestParam("notaAvaliacao") int notaAvaliacaoEvento,
+							   RedirectAttributes att
+	) {
+		CandidatoVaga candidatura = candidatoVagaDAO.findById(id).get();
+		candidatura.setNotaDesempenho(notaAvaliacaoEvento);
+		System.out.println(candidatura);
+		candidatoVagaDAO.save(candidatura);
+		ModelAndView model = new ModelAndView("redirect:/eventos");
+		att.addFlashAttribute("mensagem", "Avaliado com sucesso!");
+		return model;
 	}
 	
 	private boolean validarCandidatura (Vaga vaga, User candidato) {

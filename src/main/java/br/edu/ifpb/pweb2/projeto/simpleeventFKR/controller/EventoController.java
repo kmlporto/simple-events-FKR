@@ -1,9 +1,7 @@
 package br.edu.ifpb.pweb2.projeto.simpleeventFKR.controller;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import javax.validation.Valid;
 
@@ -103,8 +101,13 @@ public class EventoController {
 	public ModelAndView list(Authentication auth) {
 		ModelAndView modelList = new ModelAndView("evento/list");
 		User usuarioLogado = userDAO.findByEmail(auth.getName());
+		List<Evento> eventos = eventoDAO.findAll();
+		Map<Long, Map<Long, String>> eventosVagas = new HashMap<>();
+		for (Evento e: eventos)
+			eventosVagas.put(e.getId(), converterListas(e.getVagas()));
 		modelList.addObject("userLog", usuarioLogado);
-		modelList.addObject("eventos", eventoDAO.findAll());
+		modelList.addObject("eventos", eventos);
+		modelList.addObject("eventosVagas", eventosVagas);
 		return modelList;
 	}
 
@@ -182,7 +185,7 @@ public class EventoController {
 		evento.setAvaliacaoEventos(new ArrayList<>(eventoAntigo.getAvaliacaoEventos()));
 		evento.setDono(eventoAntigo.getDono());
 		if (especialidades != null) {
-			for (Vaga v: evento.descartarVagas(especialidades))
+			for (Vaga v: this.descartarVagas(evento, especialidades))
 				vagaDAO.deleteById(v.getId());
 
 			for(int i=0; i < especialidades.size(); i++) {
@@ -278,5 +281,29 @@ public class EventoController {
 		modelForm.addObject("evento",evento);
 		modelForm.addObject("candidaturas",candidaturas);
 		return modelForm;
+	}
+
+
+	private ArrayList<Vaga> descartarVagas (Evento evento, List<Long> especialidades) {
+		ArrayList<Vaga> vagas = new ArrayList<>(evento.getVagas());
+		for (Long i: especialidades)
+			for (int j = 0; j < vagas.size(); j++) {
+				if (vagas.get(j).getEspecialidade().getId() == i) {
+					vagas.remove(vagas.get(j));
+					j--;
+				}
+			}
+		evento.getVagas().removeAll(vagas);
+		return vagas;
+	}
+
+	private Map<Long, String> converterListas(List<Vaga> vagas) {
+
+		Map<Long, String> vagasCandidatos = new HashMap<>();
+		for (Vaga v: vagas)
+			for (CandidatoVaga c: v.getCandidatoVaga())
+				if (c.getStatus().name().equals("APROVADO"))
+					vagasCandidatos.put(c.getId(), c.getCandidato().getNome() + " - " + v.getEspecialidade().getNome());
+		return vagasCandidatos;
 	}
 }

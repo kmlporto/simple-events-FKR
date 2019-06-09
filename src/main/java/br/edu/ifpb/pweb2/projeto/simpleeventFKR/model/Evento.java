@@ -2,7 +2,6 @@ package br.edu.ifpb.pweb2.projeto.simpleeventFKR.model;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -152,27 +151,6 @@ public class Evento {
 			if (v.getEspecialidade().getId() == idEspecialidade)
 				vaga = v;
 		return vaga;
-	}
-
-	public ArrayList<Vaga> descartarVagas (List<Long> especialidades) {
-		System.out.println(especialidades);
-		ArrayList<Vaga> vagas = new ArrayList<>(this.getVagas());
-		for (Long i: especialidades)
-			for (int j = 0; j < vagas.size(); j++) {
-				if (vagas.get(j).getEspecialidade().getId() == i) {
-					vagas.remove(vagas.get(j));
-					j--;
-				}
-			}
-		System.out.println(vagas);
-		this.getVagas().removeAll(vagas);
-		return vagas;
-	}
-
-	public void atualizarEvento (Evento eventoAntigo) {
-		this.setVagas(new ArrayList<>(eventoAntigo.getVagas()));
-		this.setAvaliacaoEventos(new ArrayList<>(eventoAntigo.getAvaliacaoEventos()));
-		this.setDono(eventoAntigo.getDono());
 	}
 
 }
