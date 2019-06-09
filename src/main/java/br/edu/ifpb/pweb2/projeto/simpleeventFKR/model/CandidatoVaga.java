@@ -17,13 +17,13 @@ public class CandidatoVaga {
 	private Long id;
 	@ManyToOne
 	private Vaga vaga;
-	private int notaDesempenho;
+	private int notaDesempenho = -1;
 	private Status status;
 	@OneToOne
 	private User candidato;
 
 	public CandidatoVaga() {
-	};
+	}
 	
 	public Long getId() {
 		return id;

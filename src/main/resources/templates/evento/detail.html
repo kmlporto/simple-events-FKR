@@ -7,29 +7,46 @@
     <div th:replace="fragments/navbar"></div>
 	<div class="container">
 		<br>
-		<h2>Detalhes do Evento</h2>
-		<hr>		
-		<div class="card">
-			<h5 th:text="${evento.descricao}" class="card-header"></h5>
-		  	<h5 class="card-title" th:text="${evento.local}"></h5>
-		  	<p class="card-text" th:text="${evento.data}"></p>	    
-		  	<div class="card-body row">
-		    	<div th:each="vaga : ${evento.vagas}" class="col-md-4">
-		        	<div class="card mb-4 shadow-sm">
-		            	<p th:text="${vaga.especialidade.nome}"/>
-		            	<div>
-		             		<small th:text="${vaga.especialidade.descricao}"></small>
-		            	</div>
-		            	<p th:text="${vaga.qtdVagas}" class="card-text"/>
-		            	<div class="d-flex justify-content-between align-items-center">
-							<div class="btn-group pull-right" th:if="${evento.dono.id != userLog.id}">
-			               		<a th:href="@{/eventos/candidatar/{id}(id=${evento.id})}" class="btn btn-sm btn-outline-secondary">Candidatar</a>
-			        		</div>
-		        		</div>
-	       			</div>
-				</div>
+		<h3>Detalhes do Evento</h3>
+		<h4 th:text="${evento.descricao}"></h4>
+		<hr>
+		<h5 class="card-title" th:text="${evento.local}"></h5>
+		<div class="row">
+			<p class="card-text col-md-3" th:text="${evento.dono.nome}"></p>
+			<p class="card-text col-md-3" th:text="${#temporals.format(evento.data, 'dd-MM-yyyy HH:mm')}"></p>
+			<p class="card-text col-md-3" th:text="${evento.status}"></p>
+		</div>
+		<div class="row">
+			<div class="col-md-6 row">
+				<h5 class="col-md-12">Avaliação dos Participantes</h5>
+				<ul class="list-group">
+					<li class="list-group-item" th:each="candidatoVaga: ${eventoVagas}" th:text="${candidatoVaga.value}"></li>
+				</ul>
 			</div>
-       	</div>
+			<div class="col-md-6 row">
+				<h5 class="col-md-12">Avaliação do Evento</h5>
+				<ul class="list-group">
+					<li class="list-group-item" th:each="avaliacao: ${evento.getAvaliacaoEventos()}"
+						th:text="${avaliacao}"></li>
+				</ul>
+			</div>
+		</div>
+<!--		  	<div class="card-body row">-->
+<!--		    	<div th:each="vaga : ${evento.vagas}" class="col-md-4">-->
+<!--		        	<div class="card mb-4 shadow-sm">-->
+<!--		            	<p th:text="${vaga.especialidade.nome}"/>-->
+<!--		            	<div>-->
+<!--		             		<small th:text="${vaga.especialidade.descricao}"></small>-->
+<!--		            	</div>-->
+<!--		            	<p th:text="${vaga.qtdVagas}" class="card-text"/>-->
+<!--		            	<div class="d-flex justify-content-between align-items-center">-->
+<!--							<div class="btn-group pull-right" th:if="${evento.dono.id != userLog.id}">-->
+<!--			               		<a th:href="@{/eventos/candidatar/{id}(id=${evento.id})}" class="btn btn-sm btn-outline-secondary">Candidatar</a>-->
+<!--			        		</div>-->
+<!--		        		</div>-->
+<!--	       			</div>-->
+<!--				</div>-->
+<!--			</div>-->
    	</div>
 
 	<footer th:insert="fragments/footer :: footer"></footer>
