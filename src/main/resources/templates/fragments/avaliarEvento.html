@@ -1,0 +1,33 @@
+<!-- th:attr="aria-labelledby='avaliarEvento'+${trabalho.id}" -->
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+	<div th:fragment = "modalAvaliarEvento">
+	    <!-- Modal -->
+	  <div class="modal fade" th:attr="id='avaliarEvento'+${trabalho.id}" tabindex="-1" role="dialog" 
+					aria-labelledby="exampleModalLabel" 			 	 
+	 			 	aria-hidden="true">
+		  <form th:action="@{/avaliar/{id}(id=${trabalho.id})}" th:object="${AvaliacaoEvento}" method="POST">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="exampleModalLabel" th:text="'Evento'+${trabalho.vaga.evento.descricao}"></h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body">
+			        <div class="form-group">
+	  				  	<label for="formControlRange">Avaliação</label>
+	    				<input type="range" class="form-control-range" id="notaAvaliacaoEvento">
+	  				</div>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+			        <button type="submit" class="btn btn-primary">Avaliar</button>
+			      </div>
+			    </div>
+			  </div>
+		  </form>  
+	  </div>
+  	</div>
+</html>
