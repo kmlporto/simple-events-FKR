@@ -1,0 +1,39 @@
+<!-- th:attr="aria-labelledby='avaliarEvento'+${trabalho.id}" -->
+<!DOCTYPE html>
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<div th:fragment="modalAvaliarDesempenho">
+    <!-- Modal -->
+    <div class="modal fade" th:attr="id='avaliarDesempenho'+${evento.id}" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <form th:action="@{/candidaturas/{id}/avaliar(id=${evento.id})}" th:object="${Evento}" method="POST">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Avaliar Participante</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Participantes</label>
+                            <select class="form-control" name="candidatoVaga">
+                                <option  th:each="instance : ${eventosVagas.get(evento.id)}" th:text="${instance.value}" th:value="${instance.key}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Avaliação</label>
+                            <input type="range" class="form-control-range" name="notaAvaliacao" min="0"
+                                   max="10">
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">Avaliar</button>
+                        </div>
+                    </div>
+                </div>
+        </form>
+    </div>
+</div>
+</html>

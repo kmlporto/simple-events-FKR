@@ -35,15 +35,21 @@
 				<td th:text="${evento.dono.nome}"></td>
 				<td th:text="${evento.status}"></td>
 				<td>
-					<div class="btn-group pull-right" th:if="${evento.dono.id != userLog.id}">
-						<a class="delete btn btn-sm btn-info" th:href="@{/eventos/{id}(id=${evento.id})}">Detalhes</a>
-					</div>
+					<a class="delete btn btn-sm btn-info" th:href="@{/eventos/{id}(id=${evento.id})}">Detalhes</a>
 					<div class="btn-group pull-right" th:if="${evento.dono.id == userLog.id}">
 						<a class="delete btn btn-sm btn-warning" th:href="@{/eventos/edit/{id}(id=${evento.id})}">Editar</a>
 					</div>
 					<div class="btn-group pull-right" th:if="${evento.status.name() == 'ABERTO'}">
 						<a class="delete btn btn-sm btn-light" th:href="@{/eventos/{id}/candidatos(id=${evento.id})}">Analisar Candidatos</a>
 					</div>
+					<button
+							type="button" class="btn btn-sm btn-primary mt-5" data-toggle="modal"
+							th:attr="data-target='#avaliarDesempenho'+${evento.id}"
+							th:if="${evento.status.name() == 'EXECUTADO'}"
+					>
+						Avaliar
+					</button>
+					<div th:replace="fragments/avaliarDesempenho"></div>
 				</td>
 			</tr>
 		</table>
