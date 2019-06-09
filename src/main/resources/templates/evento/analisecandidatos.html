@@ -30,7 +30,7 @@
 				<td th:text="${candidatura.vaga.especialidade.nome}"></td>
 				<td th:text="${candidatura.status}"></td>
 				<td>
-					<div class="btn-group pull-right" th:if="${candidatura.status.name() == 'NAO_AVALIADO'}">
+					<div class="btn-group pull-right" th:if="${candidatura.status.name() == 'AGUARDANDO_APROVACAO'}">
 						<a class="delete btn btn-sm btn-success" th:href="@{/candidaturas/{id}/aprovar(id=${candidatura.id})}">Aprovar</a>
 						<a class="delete btn btn-sm btn-danger" th:href="@{/candidaturas/{id}/reprovar(id=${candidatura.id})}">Recusar</a>
 					</div>

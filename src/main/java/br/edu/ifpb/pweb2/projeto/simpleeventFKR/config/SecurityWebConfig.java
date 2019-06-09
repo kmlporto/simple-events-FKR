@@ -32,12 +32,12 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
 												"/datafaker",
 												"/logout").permitAll()
 									.antMatchers("/especialidades/**").access("hasRole('ROLE_ADMIN')")
-//									.and().formLogin()
-//							        		.loginPage("/login")
-//							        		.defaultSuccessUrl("/")
-//							        		.failureUrl("/erro")
-//							        		.permitAll()
-									
+									.antMatchers("/resources/**", "/webjars/**").permitAll()
+
+									.and().formLogin()
+							        		.loginPage("/login")
+							        		.permitAll()
+									.and().rememberMe().key("uniqueAndSecret").tokenValiditySeconds(86400)
 									
 									//necessario apenas para liberar o acesso ao banco de testes h2-console
 									.and().authorizeRequests().antMatchers("/h2-console/**").permitAll()

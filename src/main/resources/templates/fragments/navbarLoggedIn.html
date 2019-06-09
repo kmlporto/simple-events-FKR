@@ -32,14 +32,19 @@ xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
                 <li class="nav-item">
                     <a class="nav-link" th:href="@{/candidaturas/meustrabalhos}">Meus trabalhos</a>
                 </li>
-                <div class="dropdown">
+                <li class="dropdown">
                     <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Olá, <span sec:authentication="name"></span>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" th:href="@{/logout}">Logout</a>
+                    	<form method="post" class="dropdown-item"
+						  th:action="@{/logout}">
+						  <button type="submit" class="dropdown-item">
+						    Sair
+						  </button>
+						</form>
                     </div>
-                </div>
+                </li>
             </ul>
         </div>
     </nav>
