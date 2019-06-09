@@ -13,13 +13,13 @@
     		<h3>Dados do evento:</h3>
     		<h5 th:text="${evento.descricao}"></h5>
     		<p th:text="${evento.local}"></p>
-    		<input th:value="${#dates.format(evento.data,'yyyy-MM-dd')}" type="date" disabled>
+			<input type="datetime-local" class="form-control col-lg-3 col-md-4 col-sm-6" th:field="*{evento.data}" disabled>
     	</div>
     	
     	<form th:action="@{/eventos/candidatar/{id}(id=${evento.id})}" th:object="${evento}"
           method="POST">
     		<div class="form-group row">
-    			<div class="col-sm-2">Vagas disponíveis</div>
+    			<div class="col-sm-2">Vagas disponÃ­veis</div>
     				<div class="col-sm-10">
       					<div th:each="especialidade : ${especialidades}" class="form-check">
         					<input class="form-check-input" name="especialidades" type="checkbox" th:value="${especialidade.id}">

@@ -13,17 +13,18 @@ import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.UserDAO;
 @Controller
 @RequestMapping("/")
 public class IndexController {
-	
-	@Autowired 
-	public EventoDAO eventoDAO;
-	@Autowired
-	public UserDAO userDAO;
-	@Autowired
-	public EspecialidadeDAO especDAO;
+
+    @Autowired
+    public EventoDAO eventoDAO;
+    @Autowired
+    public UserDAO userDAO;
+    @Autowired
+    public EspecialidadeDAO especDAO;
 
     @RequestMapping(method = RequestMethod.GET)
-    public String showIndex (Model model) {
-    	model.addAttribute("eventos", eventoDAO.findAll());
+    public String showIndex(Model model) {
+        model.addAttribute("eventos", eventoDAO.findAll());
+        model.addAttribute("especialidades", especDAO.findAll());
         return "index.html";
     }
 

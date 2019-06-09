@@ -89,7 +89,6 @@ public class Vaga {
 	
 	@Override
 	public String toString() {
-		return "Vaga [id=" + id + ", evento=" + evento.getDescricao() + ", qtd vagas=" + qtdVagas+
-				", especialidade=" + especialidade.getId() + " - " + especialidade.getNome() + "]";
+		return "Vaga [" + especialidade.getNome() + " - " + qtdVagas + " vagas]";
 	}
 }

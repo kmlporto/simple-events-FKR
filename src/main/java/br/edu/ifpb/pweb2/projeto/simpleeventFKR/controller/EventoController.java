@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -28,12 +29,6 @@ import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.EspecialidadeDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.EventoDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.UserDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.VagaDAO;
-import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.CandidatoVaga;
-import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Especialidade;
-import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Evento;
-import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.User;
-import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Status;
-import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Vaga;
 
 @Controller
 @RequestMapping("/eventos")
@@ -99,6 +94,7 @@ public class EventoController {
         }
         User currentUser = userDAO.findByEmail(auth.getName());
         evento.setDono(currentUser);
+        evento.setStatus(StatusEvento.ABERTO);
         eventoDAO.save(evento);
         return new ModelAndView("redirect:/eventos");
 	}
