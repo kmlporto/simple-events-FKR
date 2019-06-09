@@ -23,20 +23,29 @@ public class AvaliacaoEvento {
 	public AvaliacaoEvento() {
 	};
 
+	
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public int getNotaAvaliacaoEvento() {
+		return notaAvaliacaoEvento;
+	}
+
+	public void setNotaAvaliacaoEvento(int notaAvaliacaoEvento) {
+		this.notaAvaliacaoEvento = notaAvaliacaoEvento;
+	}
+
 	public Evento getEvento() {
 		return evento;
 	}
 
 	public void setEvento(Evento evento) {
 		this.evento = evento;
-	}
-
-	public int getNota_avaliacao_evento() {
-		return notaAvaliacaoEvento;
-	}
-
-	public void setNota_avaliacao_evento(int nota) {
-		this.notaAvaliacaoEvento = nota;
 	}
 
 	public User getParticipante() {
@@ -48,7 +57,7 @@ public class AvaliacaoEvento {
 	}
 
 	public String toString() {
-		return "AvaliaçãoEvento [participante= "+ this.getParticipante().getNome() + ", nota= " + this.getNota_avaliacao_evento();
+		return "AvaliaçãoEvento [participante= "+ this.getParticipante().getNome() + ", nota= " + this.getNotaAvaliacaoEvento();
 	}
 
 }

@@ -131,7 +131,7 @@ public class Evento {
 	public void setStatus(StatusEvento status) {
 		this.status = status;
 	}
-
+	
 	public void setVagas(List<Vaga> vagas) {
 		this.vagas = vagas;
 	}

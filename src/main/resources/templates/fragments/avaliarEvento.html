@@ -6,7 +6,7 @@
 	  <div class="modal fade" th:attr="id='avaliarEvento'+${trabalho.id}" tabindex="-1" role="dialog" 
 					aria-labelledby="exampleModalLabel" 			 	 
 	 			 	aria-hidden="true">
-		  <form th:action="@{/avaliar/{id}(id=${trabalho.vaga.id})}" th:object="${AvaliacaoEvento}" method="POST">
+		  <form th:action="@{/avaliar/{id}(id=${trabalho.id})}" th:object="${AvaliacaoEvento}" method="POST">
 			  <div class="modal-dialog" role="document">
 			    <div class="modal-content">
 			      <div class="modal-header">
@@ -17,8 +17,8 @@
 			      </div>
 			      <div class="modal-body">
 			        <div class="form-group">
-	  				  	<label for="formControlRange">AvaliaÃ§Ã£o</label>
-	    				<input type="range" class="form-control-range" id="notaAvaliacaoEvento" name="notaAvaliacaoEvento" min="0" max="10">
+	  				  	<label for="formControlRange">Avaliação</label>
+	    				<input type="range" class="form-control-range" name="notaAvaliacaoEvento" min="0" max="10">
 	  				</div>
 			      </div>
 			      <div class="modal-footer">

@@ -168,6 +168,7 @@ public class EventoController {
 			RedirectAttributes att,
 			@Valid Evento evento,
 			BindingResult result,
+			@RequestParam(value = "status") StatusEvento status,
 			@RequestParam(value = "especialidades", required = false) List<Long> especialidades,
 			@RequestParam(value = "quantidades", required = false) List<Integer> quantidades) {
 		if (result.hasErrors()) {
@@ -196,8 +197,9 @@ public class EventoController {
 			}
 		}
 	    evento.setDono(userDAO.findByEmail(auth.getName()));
+	    evento.setStatus(status);
 	    eventoDAO.save(evento);
-	    return new ModelAndView("redirect:/eventos");
+	    return new ModelAndView("redirect:/eventos/meuseventos");
 	}
 
 	@GetMapping("/candidatar/{id}")
@@ -228,7 +230,7 @@ public class EventoController {
 				if(vaga.getEspecialidade().getId() == especialidade) {
 					candidatoVaga = new CandidatoVaga();
 					candidatoVaga.setVaga(vaga);
-					candidatoVaga.setStatus(Status.NAO_AVALIADO);
+					candidatoVaga.setStatus(Status.AGUARDANDO_APROVACAO);
 					candidatoVaga.setCandidato(userDAO.findByEmail(user.getName()));
 					candidatoVagaDAO.save(candidatoVaga);
 					vagaValida = true;
@@ -252,7 +254,7 @@ public class EventoController {
 		for (Vaga vaga : vagas) {
 			int qntAprovadoPendente = 0;
 			for (CandidatoVaga candidatoVaga : vaga.getCandidatoVaga()) {
-				if(candidatoVaga.getStatus().name().equals("APROVADO") || candidatoVaga.getStatus().name().equals("NAO_AVALIADO")) {
+				if(candidatoVaga.getStatus().name().equals("APROVADO") || candidatoVaga.getStatus().name().equals("AGUARDANDO_APROVACAO")) {
 					qntAprovadoPendente ++;
 				}
 			}

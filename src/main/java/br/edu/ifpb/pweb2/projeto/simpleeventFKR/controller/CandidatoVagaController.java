@@ -1,21 +1,26 @@
 package br.edu.ifpb.pweb2.projeto.simpleeventFKR.controller;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.AvaliacaoEventoDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.CandidatoVagaDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.EspecialidadeDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.EventoDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.UserDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.VagaDAO;
+import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.AvaliacaoEvento;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.CandidatoVaga;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Evento;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Status;
@@ -42,6 +47,9 @@ public class CandidatoVagaController {
 	@Autowired
 	public CandidatoVagaDAO candidatoVagaDAO;
 	
+	@Autowired
+	public AvaliacaoEventoDAO avaliacaoEventoDAO;
+	
 	/**ROUTES
 	 * 
 	 * **/ 
@@ -49,9 +57,21 @@ public class CandidatoVagaController {
 	@GetMapping("/meustrabalhos")
 	public ModelAndView exibirTrabalhos (Principal user) {
 		List<CandidatoVaga> trabalhos = candidatoVagaDAO.findByCandidato(userDAO.findByEmail(user.getName()));
+		User usuario = userDAO.findByEmail(user.getName());
+		List<AvaliacaoEvento> avaliacoes = avaliacaoEventoDAO.findByParticipante(usuario); 
+		Map<Long,String> mapAvaliacoes = fazerDicionarioAvaliacoeUsuario(avaliacoes);
 		ModelAndView modelForm = new ModelAndView("evento/meustrabalhos");
 		modelForm.addObject("trabalhos", trabalhos);
+		modelForm.addObject("mapAvaliacoes", mapAvaliacoes);
 		return modelForm;
+	}
+	
+	private Map<Long,String> fazerDicionarioAvaliacoeUsuario(List<AvaliacaoEvento> avaliacoesDoUsuario) {
+		Map<Long,String> mapAvaliacoes = new HashMap<Long, String>();
+		for (AvaliacaoEvento avaliacaoEvento : avaliacoesDoUsuario) {
+			mapAvaliacoes.put(avaliacaoEvento.getEvento().getId(), Integer.toString(avaliacaoEvento.getNotaAvaliacaoEvento()));
+		}
+		return mapAvaliacoes;
 	}
 	
 	@RequestMapping("/meustrabalhos/delete/{id}")
@@ -151,7 +171,7 @@ public class CandidatoVagaController {
 		List<Vaga> vagas = e.getVagas();
 		for (Vaga vaga : vagas) {
 			for (CandidatoVaga candidatura : vaga.getCandidatoVaga()) {
-				if(candidatura.getStatus()==Status.NAO_AVALIADO) {
+				if(candidatura.getStatus()==Status.AGUARDANDO_APROVACAO) {
 					candidatura.setStatus(Status.NAO_APROVADO);
 					candidatoVagaDAO.save(candidatura);
 				}
