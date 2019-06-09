@@ -19,6 +19,7 @@ import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.VagaDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.CandidatoVaga;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Evento;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Status;
+import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.StatusEvento;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.User;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Vaga;
 
@@ -73,7 +74,10 @@ public class CandidatoVagaController {
 		if(validacao) {
 			candidatura.setStatus(Status.APROVADO);
 			candidatoVagaDAO.save(candidatura);
-			att.addFlashAttribute("mensagem", "Aprovado com sucesso!");	
+			att.addFlashAttribute("mensagem", "Aprovado com sucesso!");
+			if(verificaVagasCompletas(candidatura.getVaga().getEvento())) {
+				fechaEventoPorVagasPreenchidas(candidatura.getVaga().getEvento());
+			}
 		}else {
 			candidatura.setStatus(Status.NAO_APROVADO);
 			candidatoVagaDAO.save(candidatura);
@@ -117,4 +121,43 @@ public class CandidatoVagaController {
 		}
 		return false;
 	}
+	
+	private boolean verificaVagasCompletas(Evento e) {
+		List<Vaga> vagas = e.getVagas();
+		int qntpreenchida;
+		boolean teste = false;
+		for (Vaga vaga : vagas) {
+			qntpreenchida = 0; 
+			for (CandidatoVaga candidatura : vaga.getCandidatoVaga()) {
+				if(candidatura.getStatus() == Status.APROVADO) {
+					qntpreenchida++;
+				}
+			}
+			if(qntpreenchida == vaga.getQtdVagas()) {
+				teste = true;
+			}else {
+				return false;
+			}
+		}
+		if(teste) {
+			return true;
+		}
+		return false;
+	}
+	
+	private void fechaEventoPorVagasPreenchidas(Evento e) {
+		e.setStatus(StatusEvento.FECHADO);
+		eventoDAO.save(e);
+		List<Vaga> vagas = e.getVagas();
+		for (Vaga vaga : vagas) {
+			for (CandidatoVaga candidatura : vaga.getCandidatoVaga()) {
+				if(candidatura.getStatus()==Status.NAO_AVALIADO) {
+					candidatura.setStatus(Status.NAO_APROVADO);
+					candidatoVagaDAO.save(candidatura);
+				}
+			}
+			
+		}
+	}
+	
 }

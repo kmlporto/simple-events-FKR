@@ -6,6 +6,8 @@
 
 <!-- Navbar -->
     <div th:replace="fragments/navbar"></div>
+
+	<div th:replace="fragments/mensagens"></div>
     
 	<div class="container">
 		<div th:if="${deletado}" >
@@ -31,8 +33,17 @@
 				<td th:text="${trabalho.status}"></td>
 				<td> 
 					<div class="btn-group pull-right">
-						<a class="btn btn-sm btn-primary" href=# >Avaliar</a>
-						<a class="delete btn btn-sm btn-danger" th:href="@{/meustrabalhos/delete/{id}(id=${trabalho.id})}">Desistir</a>
+							<div th:if="${trabalho.vaga.evento.status.name() == 'EXECUTADO'}">
+								<button 
+									type="button" class="btn btn-sm btn-primary" data-toggle="modal"
+									th:attr="data-target='#avaliarEvento'+${trabalho.id}" 
+									>Avaliar
+								</button>
+								<div th:replace="fragments/avaliarEvento"></div>
+							</div>
+						<a th:if="${trabalho.vaga.evento.status.name() != 'EXECUTADO'}" 
+							class="delete btn btn-sm btn-danger" 
+							th:href="@{/meustrabalhos/delete/{id}(id=${trabalho.id})}">Desistir</a>
 					</div>
 				</td>
 			</tr>

@@ -47,4 +47,8 @@ public class AvaliacaoEvento {
 		this.participante = participante;
 	}
 
+	public String toString() {
+		return "AvaliaçãoEvento [participante= "+ this.getParticipante().getNome() + ", nota= " + this.getNota_avaliacao_evento();
+	}
+
 }
