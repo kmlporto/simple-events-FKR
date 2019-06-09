@@ -1,5 +1,6 @@
 package br.edu.ifpb.pweb2.projeto.simpleeventFKR.controller;
 
+import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.Vaga;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -55,13 +56,14 @@ public class AvaliarController {
 			@RequestParam("notaAvaliacaoEvento") int notaAvaliacaoEvento,
 			RedirectAttributes att
 			) {
+		Vaga vaga = vagaDAO.findById(id).get();
 		AvaliacaoEvento avaliacao = new AvaliacaoEvento();
-		Evento evento = eventoDAO.findById(id).get();
+		Evento evento = eventoDAO.findById(vaga.getEvento().getId()).get();
 		avaliacao.setEvento(evento);
 		avaliacao.setNota_avaliacao_evento(notaAvaliacaoEvento);
 		avaliacao.setParticipante(userDAO.findByEmail(auth.getName()));
 		avaliacao = avaliacaoEventoDAO.save(avaliacao);
-		evento.getAvaliacaoEventos().add(avaliacao);
+		evento.add(avaliacao);
 		eventoDAO.save(evento);
 		ModelAndView model = new ModelAndView("redirect:/candidaturas/meustrabalhos");
 		att.addAttribute("mensagem", "Avaliado com sucesso!");
