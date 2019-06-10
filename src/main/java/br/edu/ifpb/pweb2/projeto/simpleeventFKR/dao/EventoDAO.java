@@ -14,7 +14,7 @@ public interface EventoDAO extends JpaRepository<Evento, Long> {
 
 	List<Evento> findByDono (User dono);
 	
-	@Query("select e from Evento e join e.vagas v join v.especialidade f "
+	@Query("select e from Evento e left join e.vagas v left join v.especialidade f "
 			+ "where lower(e.descricao) like lower(concat('%',:nome,'%'))"
 			+ "or lower(e.dono.nome) like lower(concat('%',:nome,'%')) "
 			+ "or lower(f.nome) like lower(concat('%',:nome,'%')) "
