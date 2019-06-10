@@ -75,7 +75,7 @@ public class FakerController {
 		user.setAdmin(true);
 		user.setSenha(passwordEncoder.encode("admin"));
 		userdao.save(user);
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 100; i++) {
 			user = new User();
 			user.setNome(faker.name().firstName());
 			user.setEmail(user.getNome().toLowerCase()+"@test");
@@ -90,7 +90,7 @@ public class FakerController {
 	public void createDataEvents () {
 		List<User> usuarios = userdao.findAll();
 		Evento evento;
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 100; i++) {
 			Random rand = new Random();
 			evento = new Evento();
 			evento.setDescricao(faker.lorem().sentence());
@@ -107,7 +107,7 @@ public class FakerController {
 		List<Especialidade> especialidades = especialidadedao.findAll();
 		List<Evento> eventos = eventoDAO.findAll();
 		Vaga vaga;
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 200; i++) {
 			Random rand = new Random();
 			vaga = new Vaga();
 			vaga.setEvento(eventos.get(rand.nextInt(eventos.size())));
@@ -139,7 +139,7 @@ public class FakerController {
 		List<Vaga> vagas = vagaDAO.findAll();
 		List<User> usuarios = userdao.findAll();
 		CandidatoVaga candidatura;
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 300; i++) {
 			Random rand = new Random();
 			candidatura = new CandidatoVaga();
 			candidatura.setVaga(vagas.get(rand.nextInt(vagas.size())));
