@@ -102,7 +102,7 @@ public class CandidatoVagaController {
 		Evento evento = candidatura.getVaga().getEvento();
 		User usuarioLogado = userDAO.findByEmail(auth.getName());
 		if (usuarioLogado.getId() != evento.getDono().getId()) {
-            att.addAttribute("mensagemerro", "você não pode alterar este evento");
+            att.addFlashAttribute("mensagemerro", "você não pode alterar este evento");
             return new ModelAndView("redirect:/eventos");
         }
         
@@ -141,11 +141,12 @@ public class CandidatoVagaController {
 	@PostMapping("/{id}/avaliar")
 	public ModelAndView detail(@PathVariable("id") Long id,
 							   @RequestParam("notaAvaliacao") int notaAvaliacaoEvento,
+							   @RequestParam("candidatoVaga") Long candidatoVaga,
 								Authentication auth,
 								RedirectAttributes att
 	) {
-		CandidatoVaga candidatura = candidatoVagaDAO.findById(id).get();
-		Evento evento = candidatura.getVaga().getEvento();
+		CandidatoVaga candidatura = candidatoVagaDAO.findById(candidatoVaga).get();
+		Evento evento = eventoDAO.getOne(id);
 		User usuarioLogado = userDAO.findByEmail(auth.getName());
 		if (usuarioLogado.getId() != evento.getDono().getId()) {
             att.addAttribute("mensagemerro", "você não pode alterar este evento");
@@ -154,7 +155,7 @@ public class CandidatoVagaController {
 		candidatura.setNotaDesempenho(notaAvaliacaoEvento);
 		System.out.println(candidatura);
 		candidatoVagaDAO.save(candidatura);
-		ModelAndView model = new ModelAndView("redirect:/eventos");
+		ModelAndView model = new ModelAndView("redirect:/eventos/meuseventos");
 		att.addFlashAttribute("mensagem", "Avaliado com sucesso!");
 		return model;
 	}
