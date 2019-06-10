@@ -38,7 +38,7 @@ public class UserController {
 		else {
 			user.setSenha(passwordEncoder.encode(user.getSenha()));
 			dao.save(user);
-			return list();
+			return new ModelAndView("redirect:/");
 		}
 	}
 	
