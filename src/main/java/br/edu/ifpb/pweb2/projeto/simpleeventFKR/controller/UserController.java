@@ -31,7 +31,7 @@ public class UserController {
 	}
 	
 	
-	@RequestMapping(method=RequestMethod.POST)
+	@RequestMapping(method=RequestMethod.POST, value="/save")
 	public ModelAndView save(@Valid User user, BindingResult  bindingResult) {
 		if (bindingResult.hasErrors())
 			return form(user);
