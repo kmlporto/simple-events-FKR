@@ -94,7 +94,7 @@ public class EventoController {
         evento.setDono(currentUser);
         evento.setStatus(StatusEvento.ABERTO);
         eventoDAO.save(evento);
-        return new ModelAndView("redirect:/eventos");
+        return new ModelAndView("redirect:/eventos/meuseventos");
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -137,7 +137,7 @@ public class EventoController {
         Evento evento = eventoDAO.findById(id).get();
         User usuarioLogado = userDAO.findByEmail(auth.getName());
         if (usuarioLogado.getId() != evento.getDono().getId()) {
-            att.addAttribute("message", "você não pode deletar este evento");
+        	att.addAttribute("mensagemerro", "você não pode deletar este evento");
             return new ModelAndView("redirect:/eventos");
         }
         if (evento != null) {
@@ -155,8 +155,8 @@ public class EventoController {
         Evento evento = eventoDAO.findById(id).get();
         User usuarioLogado = userDAO.findByEmail(auth.getName());
         if (usuarioLogado.getId() != evento.getDono().getId()) {
-            att.addAttribute("message", "você não pode alterar este evento");
-            return new ModelAndView("redirect:/eventos");
+            att.addAttribute("mensagemerro", "você não pode alterar este evento");
+            return new ModelAndView("redirect:/");
         }
         modelForm.addObject("especialidades", especDAO.findAll());
         modelForm.addObject("evento", evento);
@@ -173,12 +173,17 @@ public class EventoController {
             @RequestParam(value = "status") StatusEvento status,
             @RequestParam(value = "especialidades", required = false) List<Long> especialidades,
             @RequestParam(value = "quantidades", required = false) List<Integer> quantidades) {
-        if (result.hasErrors()) {
+        User usuarioLogado = userDAO.findByEmail(auth.getName());
+        if (usuarioLogado.getId() != evento.getDono().getId()) {
+            att.addAttribute("mensagemerro", "você não pode alterar este evento");
+            return new ModelAndView("redirect:/eventos");
+        }
+        
+    	if (result.hasErrors()) {
             evento.setId(id);
             ModelAndView modelForm = new ModelAndView("evento/form");
             return modelForm.addObject("especialidades", especDAO.findAll());
         }
-
         Evento eventoAntigo = eventoDAO.findById(id).get();
         evento.setVagas(new ArrayList<>(eventoAntigo.getVagas()));
         evento.setAvaliacaoEventos(new ArrayList<>(eventoAntigo.getAvaliacaoEventos()));
@@ -298,26 +303,29 @@ public class EventoController {
 
     private Map<Long, Map<Long, String>> converterListasEventos () {
         Map<Long, Map<Long, String>> eventosVagas = new HashMap<>();
-        for (Evento e : eventoDAO.findAll())
-            eventosVagas.put(e.getId(), converterLista(e.getVagas(), true));
+        for (Evento e : eventoDAO.findAll()) {
+        		eventosVagas.put(e.getId(), converterLista(e.getVagas(), true));
+        }
         return eventosVagas;
     }
 
     private Map<Long, String> converterLista(List<Vaga> vagas, boolean aprovado) {
 
         Map<Long, String> vagasCandidatos = new HashMap<>();
-        for (Vaga v : vagas) {
-            for (CandidatoVaga c : v.getCandidatoVaga()) {
-                if (aprovado) {
-//                    if (c.getStatus().name().equals("APROVADO")) {
-                        vagasCandidatos.put(c.getId(), c.getCandidato().getNome() + " - " + v.getEspecialidade().getNome());
-//                    }
-                } else {
-                    vagasCandidatos.put(c.getId(), c.getCandidato().getNome() + " - " +
-                            (c.getNotaDesempenho() == -1 ? "Aguardando Avaliação": c.getNotaDesempenho()));
-                }
-            }
-        }
+    	if(vagas != null) {
+	        for (Vaga v : vagas) {
+	            for (CandidatoVaga c : v.getCandidatoVaga()) {
+	                if (aprovado) {
+	                    if (c.getStatus().name().equals("APROVADO")) {
+	                        vagasCandidatos.put(c.getId(), c.getCandidato().getNome() + " - " + v.getEspecialidade().getNome());
+	                    }
+	                } else {
+	                    vagasCandidatos.put(c.getId(), c.getCandidato().getNome() + " - " +
+	                            (c.getNotaDesempenho() == -1 ? "Aguardando Avaliação": c.getNotaDesempenho()));
+	                }
+	            }
+	        }
+    	}
         return vagasCandidatos;
     }
 }

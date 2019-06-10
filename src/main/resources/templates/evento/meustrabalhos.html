@@ -45,7 +45,7 @@
 									></button>
 								<div th:replace="fragments/avaliarEvento"></div>
 							</div>
-						<a th:if="${trabalho.vaga.evento.status.name() != 'EXECUTADO'}" 
+						<a th:if="${trabalho.vaga.evento.status.name() != 'EXECUTADO'}"
 							class="delete btn btn-sm btn-danger" 
 							th:href="@{/candidaturas/meustrabalhos/delete/{id}(id=${trabalho.id})}">Desistir</a>
 					</div>
