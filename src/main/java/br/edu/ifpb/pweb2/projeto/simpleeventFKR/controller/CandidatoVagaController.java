@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -72,9 +73,17 @@ public class CandidatoVagaController {
 	}
 	
 	@RequestMapping("/meustrabalhos/delete/{id}")
-	public ModelAndView delete(@PathVariable("id") Long id, RedirectAttributes att) {
+	public ModelAndView delete(@PathVariable("id") Long id, 
+			Authentication auth,
+			RedirectAttributes att) {
 		CandidatoVaga trabalho = candidatoVagaDAO.findById(id).get();
 		Vaga vaga = vagaDAO.findById(trabalho.getVaga().getId()).get();
+		Evento evento = vaga.getEvento();
+		User usuarioLogado = userDAO.findByEmail(auth.getName());
+		if (usuarioLogado.getId() != evento.getDono().getId()) {
+            att.addAttribute("mensagemerro", "você não pode alterar este evento");
+            return new ModelAndView("redirect:/eventos");
+        }
 		if (trabalho != null) {
 			vaga.remove(trabalho);
 			candidatoVagaDAO.deleteById(id);
@@ -85,9 +94,18 @@ public class CandidatoVagaController {
 	
 	@RequestMapping("/{id}/aprovar")
 	public ModelAndView aprovarCandidato (@PathVariable("id") Long id,
+			Authentication auth,
 			RedirectAttributes att) {
 		CandidatoVaga candidatura = candidatoVagaDAO.findById(id).get();
+		
 		Boolean validacao = validarCandidatura(candidatura.getVaga(), candidatura.getCandidato());
+		Evento evento = candidatura.getVaga().getEvento();
+		User usuarioLogado = userDAO.findByEmail(auth.getName());
+		if (usuarioLogado.getId() != evento.getDono().getId()) {
+            att.addAttribute("mensagemerro", "você não pode alterar este evento");
+            return new ModelAndView("redirect:/eventos");
+        }
+        
 		if(validacao) {
 			candidatura.setStatus(Status.APROVADO);
 			candidatoVagaDAO.save(candidatura);
@@ -105,8 +123,15 @@ public class CandidatoVagaController {
 	
 	@RequestMapping("/{id}/reprovar")
 	public ModelAndView reprovarCandidato (@PathVariable("id") Long id,
+			Authentication auth,
 			RedirectAttributes att) {
 		CandidatoVaga candidatura = candidatoVagaDAO.findById(id).get();
+		Evento evento = candidatura.getVaga().getEvento();
+		User usuarioLogado = userDAO.findByEmail(auth.getName());
+		if (usuarioLogado.getId() != evento.getDono().getId()) {
+            att.addAttribute("mensagemerro", "você não pode alterar este evento");
+            return new ModelAndView("redirect:/eventos");
+        }
 		candidatura.setStatus(Status.NAO_APROVADO);
 		candidatoVagaDAO.save(candidatura);
 		att.addFlashAttribute("mensagemsecundaria", "Candidato reprovado com sucesso!");	
@@ -116,9 +141,16 @@ public class CandidatoVagaController {
 	@PostMapping("/{id}/avaliar")
 	public ModelAndView detail(@PathVariable("id") Long id,
 							   @RequestParam("notaAvaliacao") int notaAvaliacaoEvento,
-							   RedirectAttributes att
+								Authentication auth,
+								RedirectAttributes att
 	) {
 		CandidatoVaga candidatura = candidatoVagaDAO.findById(id).get();
+		Evento evento = candidatura.getVaga().getEvento();
+		User usuarioLogado = userDAO.findByEmail(auth.getName());
+		if (usuarioLogado.getId() != evento.getDono().getId()) {
+            att.addAttribute("mensagemerro", "você não pode alterar este evento");
+            return new ModelAndView("redirect:/eventos");
+        }
 		candidatura.setNotaDesempenho(notaAvaliacaoEvento);
 		System.out.println(candidatura);
 		candidatoVagaDAO.save(candidatura);

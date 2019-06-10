@@ -39,7 +39,7 @@
 					<div class="btn-group pull-right" th:if="${evento.dono.id == userLog.id}">
 						<a class="delete btn btn-sm btn-warning" th:href="@{/eventos/edit/{id}(id=${evento.id})}">Editar</a>
 					</div>
-					<div class="btn-group pull-right" th:if="${evento.status.name() == 'ABERTO'}">
+					<div class="btn-group pull-right" th:if="${evento.status.name() == 'ABERTO' && evento.dono.email.equals(userLog.email)}">
 						<a class="delete btn btn-sm btn-light" th:href="@{/eventos/{id}/candidatos(id=${evento.id})}">Analisar Candidatos</a>
 					</div>
 					<button
