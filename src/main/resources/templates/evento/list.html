@@ -45,7 +45,7 @@
 					<button
 							type="button" class="btn btn-sm btn-primary" data-toggle="modal"
 							th:attr="data-target='#avaliarDesempenho'+${evento.id}"
-							th:if="${evento.status.name() == 'EXECUTADO'  && evento.dono.email.equals(userLog.email)}"
+							th:if="${evento.status.name() == 'EXECUTADO' && evento.dono.email.equals(userLog.email)}"
 					>
 						Avaliar
 					</button>
