@@ -173,7 +173,14 @@ public class EventoController {
             @RequestParam(value = "status") StatusEvento status,
             @RequestParam(value = "especialidades", required = false) List<Long> especialidades,
             @RequestParam(value = "quantidades", required = false) List<Integer> quantidades) {
-        User usuarioLogado = userDAO.findByEmail(auth.getName());
+        
+
+        Evento eventoAntigo = eventoDAO.findById(id).get();
+        evento.setVagas(new ArrayList<>(eventoAntigo.getVagas()));
+        evento.setAvaliacaoEventos(new ArrayList<>(eventoAntigo.getAvaliacaoEventos()));
+        evento.setDono(eventoAntigo.getDono());
+        
+    	User usuarioLogado = userDAO.findByEmail(auth.getName());
         if (usuarioLogado.getId() != evento.getDono().getId()) {
             att.addAttribute("mensagemerro", "você não pode alterar este evento");
             return new ModelAndView("redirect:/eventos");
@@ -184,10 +191,6 @@ public class EventoController {
             ModelAndView modelForm = new ModelAndView("evento/form");
             return modelForm.addObject("especialidades", especDAO.findAll());
         }
-        Evento eventoAntigo = eventoDAO.findById(id).get();
-        evento.setVagas(new ArrayList<>(eventoAntigo.getVagas()));
-        evento.setAvaliacaoEventos(new ArrayList<>(eventoAntigo.getAvaliacaoEventos()));
-        evento.setDono(eventoAntigo.getDono());
         if (especialidades != null) {
             for (Vaga v : this.descartarVagas(evento, especialidades))
                 vagaDAO.deleteById(v.getId());
