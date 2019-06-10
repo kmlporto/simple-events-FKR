@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.EspecialidadeDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.EventoDAO;
 import br.edu.ifpb.pweb2.projeto.simpleeventFKR.dao.UserDAO;
+import br.edu.ifpb.pweb2.projeto.simpleeventFKR.model.StatusEvento;
 
 @Controller
 @RequestMapping("/")
@@ -33,8 +35,7 @@ public class IndexController {
         if(user != null) {
         	response.addCookie(new Cookie("lastUser",user.getName()));
         }
-    	model.addAttribute("eventos", eventoDAO.findAll());
-        model.addAttribute("especialidades", especDAO.findAll());
+    	model.addAttribute("eventos", eventoDAO.findByStatus(StatusEvento.ABERTO));
         return "index.html";
     }
     
@@ -44,6 +45,13 @@ public class IndexController {
     		model.addAttribute("lastUser",lastUser);	
     	}
     	return "login"; // <<< Retorna a página de login
+    }
+    
+    @GetMapping("/pesquisar")
+    public String pesquisar(Model model,
+    		@RequestParam(value = "nome", required = false) String nome) {
+    	model.addAttribute("eventos",eventoDAO.findByName(nome));
+    	return "index";
     }
 
 }

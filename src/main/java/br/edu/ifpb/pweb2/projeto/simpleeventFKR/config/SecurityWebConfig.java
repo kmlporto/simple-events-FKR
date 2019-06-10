@@ -30,6 +30,8 @@ public class SecurityWebConfig extends WebSecurityConfigurerAdapter {
 									.antMatchers("/",
 												"/usuarios/**",
 												"/datafaker",
+												"/pesquisar**",
+//												"/eventos/**",
 												"/logout").permitAll()
 									.antMatchers("/especialidades/**").access("hasRole('ROLE_ADMIN')")
 									.antMatchers("/resources/**", "/webjars/**").permitAll()

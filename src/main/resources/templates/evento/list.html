@@ -43,7 +43,7 @@
 						<a class="delete btn btn-sm btn-light" th:href="@{/eventos/{id}/candidatos(id=${evento.id})}">Analisar Candidatos</a>
 					</div>
 					<button
-							type="button" class="btn btn-sm btn-primary mt-5" data-toggle="modal"
+							type="button" class="btn btn-sm btn-primary" data-toggle="modal"
 							th:attr="data-target='#avaliarDesempenho'+${evento.id}"
 							th:if="${evento.status.name() == 'EXECUTADO'}"
 					>

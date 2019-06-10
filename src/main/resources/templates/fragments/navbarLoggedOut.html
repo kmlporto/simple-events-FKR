@@ -14,9 +14,9 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse items-navbar" id="navbarCollapse">
-            <form class="form-inline mt-2 mt-md-0 col-lg-8" style="justify-content: flex-end;">
-                <input class="form-control mr-sm-2 col-lg-8" type="text" placeholder="Search" aria-label="Search">
-                <button class="btn teste my-2 my-sm-0" type="submit">Search</button>
+            <form th:action="@{/pesquisar}" class="form-inline mt-2 mt-md-0 col-lg-8" style="justify-content: flex-end;">
+                <input name="nome" class="form-control mr-sm-2 col-lg-8" type="text" placeholder="Pesquisar por nome do evento,especialidade,promotor" aria-label="Search">
+                <button class="btn teste my-2 my-sm-0" type="submit">Pesquisar</button>
             </form>
             <ul class="navbar-nav">
                 <li class="nav-item">
